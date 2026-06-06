@@ -1,34 +1,34 @@
-# Patents Workflow Repository Design
+# 专利工作流仓库设计
 
-Date: 2026-06-06
+日期：2026-06-06
 
-## Goal
+## 目标
 
-Create a local development repository for the patents workflow skill suite. The repository is the source for collaboration, checks, releases, and later GitHub publication. Codex still discovers skills from `C:\Users\spade k\.codex\skills`, so the repository must provide a sync path instead of becoming the live skill root.
+创建一个本地开发仓库，用于维护专利工作流 skill 套件。该仓库负责协作开发、发布前检查、版本发布，以及后续上传 GitHub。Codex 仍从 `C:\Users\spade k\.codex\skills` 发现 skill，因此该仓库不作为实时 skill 根目录，而是通过同步脚本把仓库中的 skill 同步到 Codex 的实际 skill 目录。
 
-## Repository Identity
+## 仓库身份
 
-Use a stable repository name:
+使用固定仓库名：
 
 ```text
 C:\Users\spade k\patents-workflow
 ```
 
-The suite version starts at `1.6.0`. Future releases move from `1.6.0` to `1.7.0`, `2.0.0`, and so on in the same repository. Do not create versioned repositories such as `patents-workflow-v1.7` for normal iteration.
+套件初始版本为 `1.6.0`。后续从 `1.6.0` 迭代到 `1.7.0`、`2.0.0` 等版本时，仍在同一个仓库内演进。常规版本迭代不新建 `patents-workflow-v1.7` 这类版本化仓库。
 
-Version state lives in:
+版本状态保存在：
 
 - `VERSION`
 - `manifest.json`
 - `CHANGELOG.md`
-- git tags such as `v1.6.0` and `v1.7.0`
-- GitHub Releases after publication
+- git tag，例如 `v1.6.0`、`v1.7.0`
+- 后续 GitHub Release
 
-## Skill Scope
+## Skill 范围
 
-The initial suite includes 15 skills copied from `C:\Users\spade k\.codex\skills`.
+初始套件包含 15 个从 `C:\Users\spade k\.codex\skills` 复制而来的 skill。
 
-Primary patent workflow skills:
+核心专利工作流 skill：
 
 - `cn-patent-repo-scout`
 - `cn-patent-mainline-analysis`
@@ -40,7 +40,7 @@ Primary patent workflow skills:
 - `cn-patent-docx-export`
 - `cn-patent-project-drafting`
 
-Vendored supporting skills:
+随仓库托管的支撑型 skill：
 
 - `seaborn`
 - `scientific-visualization`
@@ -49,9 +49,9 @@ Vendored supporting skills:
 - `markdown-mermaid-writing`
 - `generate-image`
 
-The supporting skills are vendored dependencies. They are copied, checked, and synchronized with the suite, but are not the default target for functional changes unless a later task explicitly scopes that work.
+支撑型 skill 按 vendored dependencies 处理。它们会随套件复制、检查和同步，但默认不作为功能改造目标。除非后续任务明确要求，否则不主动修改这些通用支撑 skill 的行为。
 
-## Directory Layout
+## 目录结构
 
 ```text
 patents-workflow/
@@ -88,65 +88,65 @@ patents-workflow/
     generate-image/
 ```
 
-Each skill remains a direct child of `skills/` and must contain its own `SKILL.md`. When synchronized, each skill is copied to `C:\Users\spade k\.codex\skills\<skill-name>`, preserving Codex discovery behavior.
+每个 skill 都是 `skills/` 的直接子目录，并且每个 skill 目录内必须直接包含自己的 `SKILL.md`。同步后，每个 skill 会被复制到 `C:\Users\spade k\.codex\skills\<skill-name>`，从而保持 Codex 现有的 skill 发现机制不变。
 
-## Sync Strategy
+## 同步策略
 
-`scripts/sync-to-codex-skills.ps1` synchronizes from the repository to the live Codex skill directory.
+`scripts/sync-to-codex-skills.ps1` 负责从开发仓库同步到 Codex 实际使用的 skill 目录。
 
-Default behavior is dry-run. It reports what would be copied, removed, or overwritten. A separate explicit flag performs writes.
+默认行为是 dry-run，只报告将要复制、删除或覆盖的内容。只有显式传入执行参数时，脚本才会写入 `C:\Users\spade k\.codex\skills`。
 
-Expected behavior:
+预期行为：
 
-- read the skill list from `manifest.json`
-- copy only declared skill directories
-- exclude cache and generated files such as `__pycache__/`, `*.pyc`, `.pytest_cache/`, `.mypy_cache/`, and `.ruff_cache/`
-- refuse to run if source skill directories do not contain `SKILL.md`
-- avoid touching non-suite skills in `C:\Users\spade k\.codex\skills`
+- 从 `manifest.json` 读取 skill 列表
+- 只复制 manifest 中声明的 skill 目录
+- 排除缓存和生成物，例如 `__pycache__/`、`*.pyc`、`.pytest_cache/`、`.mypy_cache/`、`.ruff_cache/`
+- 如果源 skill 目录缺少 `SKILL.md`，拒绝执行
+- 不触碰 `C:\Users\spade k\.codex\skills` 中不属于本套件的其他 skill
 
-## Release Check Strategy
+## 发布前检查策略
 
-`scripts/check-release.ps1` validates the repository before collaboration or publication.
+`scripts/check-release.ps1` 负责在协作开发或发布前校验仓库状态。
 
-Required checks:
+必须检查：
 
-- every manifest skill exists under `skills/`
-- every skill has `SKILL.md`
-- every `SKILL.md` frontmatter includes `name` and `description`
-- no `__pycache__/` or `*.pyc` files are present
-- no obvious secret patterns are present
-- README skill list matches `manifest.json`
-- `VERSION` matches `manifest.json.version`
+- manifest 中声明的每个 skill 都存在于 `skills/`
+- 每个 skill 都包含 `SKILL.md`
+- 每个 `SKILL.md` 的 frontmatter 都包含 `name` 和 `description`
+- 仓库中不存在 `__pycache__/` 或 `*.pyc`
+- 仓库中不存在明显的 secret 模式
+- README 中声明的 skill 列表与 `manifest.json` 一致
+- `VERSION` 与 `manifest.json.version` 一致
 
-The first implementation may keep the checks simple and deterministic. More checks can be added after the repository is stable.
+第一版实现可以保持检查逻辑简单、确定、可重复。仓库稳定后再逐步加入更严格的校验。
 
-## Publication Path
+## 发布路径
 
-Stage 1 is local repository cleanup only.
+第 1 阶段只做本地仓库整理。
 
-Stage 2 can push the repository to a private GitHub repository named `patents-workflow` and invite collaborators.
+第 2 阶段可以推送到名为 `patents-workflow` 的 GitHub private repository，并邀请协作者参与。
 
-Stage 3 can prepare for public open source by adding or confirming:
+第 3 阶段再准备公开开源，届时需要补齐或确认：
 
-- license choice
-- patent/legal disclaimer
-- contribution policy
-- issue and pull request templates
+- license 选择
+- 专利和法律免责声明
+- 贡献规则
+- issue 与 pull request 模板
 - release checklist
-- CI checks
-- security policy if needed
+- CI 检查
+- 如有必要，补充 security policy
 
-## Non-Goals
+## 非目标
 
-This setup does not redesign the patent workflow itself. It does not merge all skills into one parent skill. It does not make `patents-workflow` the live Codex skill root. It does not change vendored supporting skill behavior by default.
+本次整理不重新设计专利工作流本身。不把所有 skill 合并成一个父级 skill。不让 `patents-workflow` 仓库直接成为 Codex 的实时 skill 根目录。不默认改动支撑型 skill 的行为。
 
-## Approval Criteria
+## 验收标准
 
-The first implementation is complete when:
+第一版实现完成时，应满足：
 
-- the local git repository exists
-- the 15 declared skills are copied under `skills/` without cache artifacts
-- repository governance files exist
-- sync and release-check scripts exist
-- release checks pass
-- the live Codex skill discovery layout remains compatible
+- 本地 git 仓库已存在
+- 15 个声明的 skill 已复制到 `skills/`，且不包含缓存产物
+- 仓库治理文件已存在
+- 同步脚本和发布前检查脚本已存在
+- 发布前检查通过
+- Codex 实际 skill 发现布局保持兼容
