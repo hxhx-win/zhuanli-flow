@@ -2,17 +2,26 @@
 
 ## 仓库定位
 
-`patents-workflow` 是开发仓库，也是 15 个声明 skill 的真实文件位置。Codex 实际扫描的 `.codex\skills\<skill-name>` 目录会通过 Windows directory junction 指向本仓库的 `skills\<skill-name>`。
+`patents-workflow` 是开发仓库，也是 15 个声明 skill 的真实文件位置。Codex 实际扫描的 `~/.codex/skills/<skill-name>` 目录会通过本机 live link 指向当前 clone 的 `skills/<skill-name>`。
+
+首次 clone 后运行：
+
+```bash
+python scripts/link-live-skills.py --apply
+python scripts/check-live-links.py
+```
+
+`link-live-skills.py` 默认使用当前用户的 `~/.codex/skills`，不会写死某台机器的用户目录。需要自定义位置时传入 `--live-root`。
 
 ## 日常修改
 
 可以直接修改：
 
 ```text
-C:\Users\spade k\.codex\skills\<skill-name>
+~/.codex/skills/<skill-name>
 ```
 
-由于该目录是 junction，Git 会在仓库中看到对应改动：
+由于该目录指向仓库中的 skill 目录，Git 会在仓库中看到对应改动：
 
 ```bash
 git status --short

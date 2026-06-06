@@ -12,13 +12,13 @@
 可以直接修改：
 
 ```text
-C:\Users\spade k\.codex\skills\<skill-name>
+~/.codex/skills/<skill-name>
 ```
 
-这些目录是 junction，真实文件在：
+这些目录应通过 `python scripts/link-live-skills.py --apply` 指向当前 clone 的仓库目录，真实文件在：
 
 ```text
-C:\Users\spade k\patents-workflow\skills\<skill-name>
+<repo>/skills/<skill-name>
 ```
 
 ## 提交前检查

@@ -4,14 +4,14 @@
 
 ## 目标
 
-创建一个本地开发仓库，用于维护专利工作流 skill 套件。该仓库负责协作开发、发布前检查、版本发布，以及后续上传 GitHub。Codex 仍从 `C:\Users\spade k\.codex\skills` 发现 skill；manifest 声明的 live skill 目录通过 Windows directory junction 指向仓库内对应目录，因此无需手动运行同步脚本。
+创建一个本地开发仓库，用于维护专利工作流 skill 套件。该仓库负责协作开发、发布前检查、版本发布，以及后续上传 GitHub。Codex 仍从用户本机的 `~/.codex/skills` 发现 skill；manifest 声明的 live skill 目录通过本机 live link 指向仓库内对应目录，因此日常开发无需手动同步。
 
 ## 仓库身份
 
 使用固定仓库名：
 
 ```text
-C:\Users\spade k\patents-workflow
+<repo>
 ```
 
 套件初始版本为 `1.6.0`。后续从 `1.6.0` 迭代到 `1.7.0`、`2.0.0` 等版本时，仍在同一个仓库内演进。常规版本迭代不新建 `patents-workflow-v1.7` 这类版本化仓库。
@@ -26,7 +26,7 @@ C:\Users\spade k\patents-workflow
 
 ## Skill 范围
 
-初始套件包含 15 个从 `C:\Users\spade k\.codex\skills` 复制而来的 skill。
+初始套件包含 15 个从本机 live skill 目录导入的 skill。协作者 clone 后不需要重复导入，只需要运行 `scripts/link-live-skills.py` 把自己的 `~/.codex/skills` 指向 clone 下的 `skills/`。
 
 核心专利工作流 skill：
 
@@ -68,6 +68,7 @@ patents-workflow/
       specs/
         2026-06-06-patents-workflow-repo-design.md
   scripts/
+    link-live-skills.py
     check-release.py
     check-live-links.py
   skills/
@@ -88,17 +89,17 @@ patents-workflow/
     generate-image/
 ```
 
-每个 skill 都是 `skills/` 的直接子目录，并且每个 skill 目录内必须直接包含自己的 `SKILL.md`。`.codex\skills` 下的同名 live 目录是指向这些目录的 junction，从而保持 Codex 现有的 skill 发现机制不变。
+每个 skill 都是 `skills/` 的直接子目录，并且每个 skill 目录内必须直接包含自己的 `SKILL.md`。用户本机 `.codex/skills` 下的同名 live 目录由 `scripts/link-live-skills.py` 初始化为指向这些目录的 live link，从而保持 Codex 现有的 skill 发现机制不变。
 
 ## Live 链接策略
 
-实际开发习惯以 `C:\Users\spade k\.codex\skills` 为主：用户通常会直接在 live skill 目录内修改和试用。为避免反复运行同步脚本，本仓库采用 Windows directory junction 方案。
+实际开发习惯以用户本机的 `~/.codex/skills` 为主：用户通常会直接在 live skill 目录内修改和试用。为避免反复运行同步脚本，本仓库采用本机 live link 方案。
 
 每个本套件 skill 在 `.codex\skills` 下仍保持直接子目录形态，但该目录是指向开发仓库对应目录的 junction：
 
 ```text
-C:\Users\spade k\.codex\skills\<skill-name>
-  -> C:\Users\spade k\patents-workflow\skills\<skill-name>
+~/.codex/skills/<skill-name>
+  -> <repo>/skills/<skill-name>
 ```
 
 预期行为：
@@ -106,9 +107,9 @@ C:\Users\spade k\.codex\skills\<skill-name>
 - 先把 manifest 声明的 skill 复制到 `patents-workflow/skills/`
 - 清理复制后的缓存和生成物，例如 `__pycache__/`、`*.pyc`、`.pytest_cache/`、`.mypy_cache/`、`.ruff_cache/`
 - 验证每个仓库 skill 目录都包含 `SKILL.md`
-- 将 `.codex\skills` 下对应原目录移动到备份目录，再创建同名 junction
-- 不触碰 `.codex\skills` 中不属于 manifest 的其他 skill
-- 后续直接修改 `.codex\skills\<skill-name>` 时，实际修改的是仓库中的文件，Git 可直接跟踪变更
+- 将 `.codex/skills` 下对应原目录移动到备份目录，再创建同名 live link
+- 不触碰 `.codex/skills` 中不属于 manifest 的其他 skill
+- 后续直接修改 `.codex/skills/<skill-name>` 时，实际修改的是仓库中的文件，Git 可直接跟踪变更
 
 ## 发布前检查策略
 
@@ -123,7 +124,7 @@ C:\Users\spade k\.codex\skills\<skill-name>
 - 仓库中不存在明显的 secret 模式
 - README 中声明的 skill 列表与 `manifest.json` 一致
 - `VERSION` 与 `manifest.json.version` 一致
-- `.codex\skills` 下 manifest 声明的 live 目录可通过 `scripts/check-live-links.py` 验证为指向仓库的 junction
+- `.codex/skills` 下 manifest 声明的 live 目录可通过 `scripts/check-live-links.py` 验证为指向仓库的 live link
 
 第一版实现可以保持检查逻辑简单、确定、可重复。仓库稳定后再逐步加入更严格的校验。
 

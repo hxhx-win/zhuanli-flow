@@ -8,14 +8,28 @@
 
 ## 工作方式
 
-本仓库使用 Windows directory junction 管理 live skill：
+本仓库使用本机 live link 管理 Codex 可扫描的 skill：
 
 ```text
-C:\Users\spade k\.codex\skills\<skill-name>
-  -> C:\Users\spade k\patents-workflow\skills\<skill-name>
+~/.codex/skills/<skill-name>
+  -> <repo>/skills/<skill-name>
 ```
 
-你可以继续在 `C:\Users\spade k\.codex\skills` 下直接修改和试用 skill；实际文件位于 `patents-workflow\skills`，Git 会直接看到变更。
+你可以继续在 `~/.codex/skills` 下直接修改和试用 skill；实际文件位于当前 clone 的 `skills/` 目录，Git 会直接看到变更。
+
+协作者首次 clone 后，在仓库根目录运行：
+
+```bash
+python scripts/link-live-skills.py --apply
+python scripts/check-live-links.py
+```
+
+脚本默认使用当前用户的 `~/.codex/skills`，不会写死某台机器的用户目录。如需指定其他 live skill 根目录：
+
+```bash
+python scripts/link-live-skills.py --live-root "<path-to-codex-skills>" --apply
+python scripts/check-live-links.py --live-root "<path-to-codex-skills>"
+```
 
 ## Skill 范围
 

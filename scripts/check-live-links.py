@@ -43,7 +43,7 @@ def main() -> int:
             continue
 
         if not is_reparse_point(live_path):
-            errors.append(f"Live skill 不是 junction/reparse point: {live_path}")
+            errors.append(f"Live skill 不是 live link/reparse point: {live_path}")
             continue
 
         try:
