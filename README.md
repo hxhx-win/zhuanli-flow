@@ -42,9 +42,9 @@ C:\Users\spade k\.codex\skills\<skill-name>
 
 ## 本地检查
 
-```powershell
-.\scripts\check-release.ps1
-.\scripts\check-live-links.ps1
+```bash
+python scripts/check-release.py
+python scripts/check-live-links.py
 ```
 
 ## 版本迭代

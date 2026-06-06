@@ -4,7 +4,7 @@
 
 ## 目标
 
-创建一个本地开发仓库，用于维护专利工作流 skill 套件。该仓库负责协作开发、发布前检查、版本发布，以及后续上传 GitHub。Codex 仍从 `C:\Users\spade k\.codex\skills` 发现 skill，因此该仓库不作为实时 skill 根目录，而是通过同步脚本把仓库中的 skill 同步到 Codex 的实际 skill 目录。
+创建一个本地开发仓库，用于维护专利工作流 skill 套件。该仓库负责协作开发、发布前检查、版本发布，以及后续上传 GitHub。Codex 仍从 `C:\Users\spade k\.codex\skills` 发现 skill；manifest 声明的 live skill 目录通过 Windows directory junction 指向仓库内对应目录，因此无需手动运行同步脚本。
 
 ## 仓库身份
 
@@ -68,8 +68,8 @@ patents-workflow/
       specs/
         2026-06-06-patents-workflow-repo-design.md
   scripts/
-    check-release.ps1
-    check-live-links.ps1
+    check-release.py
+    check-live-links.py
   skills/
     cn-patent-repo-scout/
     cn-patent-mainline-analysis/
@@ -88,7 +88,7 @@ patents-workflow/
     generate-image/
 ```
 
-每个 skill 都是 `skills/` 的直接子目录，并且每个 skill 目录内必须直接包含自己的 `SKILL.md`。同步后，每个 skill 会被复制到 `C:\Users\spade k\.codex\skills\<skill-name>`，从而保持 Codex 现有的 skill 发现机制不变。
+每个 skill 都是 `skills/` 的直接子目录，并且每个 skill 目录内必须直接包含自己的 `SKILL.md`。`.codex\skills` 下的同名 live 目录是指向这些目录的 junction，从而保持 Codex 现有的 skill 发现机制不变。
 
 ## Live 链接策略
 
@@ -112,7 +112,7 @@ C:\Users\spade k\.codex\skills\<skill-name>
 
 ## 发布前检查策略
 
-`scripts/check-release.ps1` 负责在协作开发或发布前校验仓库状态。
+`scripts/check-release.py` 负责在协作开发或发布前校验仓库状态。
 
 必须检查：
 
@@ -123,7 +123,7 @@ C:\Users\spade k\.codex\skills\<skill-name>
 - 仓库中不存在明显的 secret 模式
 - README 中声明的 skill 列表与 `manifest.json` 一致
 - `VERSION` 与 `manifest.json.version` 一致
-- `.codex\skills` 下 manifest 声明的 live 目录可通过 `scripts/check-live-links.ps1` 验证为指向仓库的 junction
+- `.codex\skills` 下 manifest 声明的 live 目录可通过 `scripts/check-live-links.py` 验证为指向仓库的 junction
 
 第一版实现可以保持检查逻辑简单、确定、可重复。仓库稳定后再逐步加入更严格的校验。
 

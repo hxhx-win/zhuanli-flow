@@ -14,16 +14,16 @@ C:\Users\spade k\.codex\skills\<skill-name>
 
 由于该目录是 junction，Git 会在仓库中看到对应改动：
 
-```powershell
+```bash
 git status --short
 git diff
 ```
 
 ## 本地检查
 
-```powershell
-.\scripts\check-release.ps1
-.\scripts\check-live-links.ps1
+```bash
+python scripts/check-release.py
+python scripts/check-live-links.py
 ```
 
 ## 版本迭代

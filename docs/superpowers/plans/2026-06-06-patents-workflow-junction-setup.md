@@ -6,7 +6,7 @@
 
 **Architecture:** `patents-workflow\skills\<skill-name>` 是真实文件位置；`C:\Users\spade k\.codex\skills\<skill-name>` 是 junction。用户可以继续在 `.codex\skills` 下修改和试用，Git 会在 `patents-workflow` 仓库中直接看到变更。
 
-**Tech Stack:** PowerShell、Git、Windows directory junction、Markdown、JSON。
+**Tech Stack:** Python、Git、Windows directory junction、Markdown、JSON。
 
 ---
 
@@ -39,11 +39,11 @@
 ## Task 3: 创建检查脚本
 
 **Files:**
-- Create: `scripts/check-release.ps1`
-- Create: `scripts/check-live-links.ps1`
+- Create: `scripts/check-release.py`
+- Create: `scripts/check-live-links.py`
 
-- [ ] `check-release.ps1` 检查 manifest、VERSION、README、SKILL.md frontmatter、缓存产物和明显 secret。
-- [ ] `check-live-links.ps1` 检查 `.codex\skills` 下 15 个 live 目录是否为 junction，且目标指向仓库 `skills/`。
+- [ ] `check-release.py` 检查 manifest、VERSION、README、SKILL.md frontmatter、缓存产物和明显 secret。
+- [ ] `check-live-links.py` 检查 `.codex\skills` 下 15 个 live 目录是否为 junction，且目标指向仓库 `skills/`。
 - [ ] 运行两个检查脚本，确认 release check 在创建 junction 前可通过，live links check 在创建 junction 前应报告尚未链接。
 - [ ] 提交：`添加仓库检查脚本`
 
@@ -55,12 +55,12 @@
 - [ ] 创建备份目录：`C:\Users\spade k\.codex\skills\.patents-workflow-backup-<timestamp>`。
 - [ ] 对 manifest 中 15 个 skill：确认仓库源目录存在且有 `SKILL.md`。
 - [ ] 将 `.codex\skills\<skill-name>` 原目录移动到备份目录。
-- [ ] 用 `New-Item -ItemType Junction` 创建同名 junction，指向 `patents-workflow\skills\<skill-name>`。
-- [ ] 运行 `scripts/check-live-links.ps1`，确认全部 live 目录是 junction。
+- [ ] 创建同名 junction，指向 `patents-workflow\skills\<skill-name>`。
+- [ ] 运行 `python scripts/check-live-links.py`，确认全部 live 目录是 junction。
 
 ## Task 5: 最终验证
 
-- [ ] 运行 `scripts/check-release.ps1`。
-- [ ] 运行 `scripts/check-live-links.ps1`。
+- [ ] 运行 `python scripts/check-release.py`。
+- [ ] 运行 `python scripts/check-live-links.py`。
 - [ ] 运行 `git status --short`，确认只有预期变更。
 - [ ] 提交文档和脚本的最终修订：`改用 junction 管理 live skill`

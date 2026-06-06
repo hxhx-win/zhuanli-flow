@@ -23,9 +23,9 @@ C:\Users\spade k\patents-workflow\skills\<skill-name>
 
 ## 提交前检查
 
-```powershell
-.\scripts\check-release.ps1
-.\scripts\check-live-links.ps1
+```bash
+python scripts/check-release.py
+python scripts/check-live-links.py
 ```
 
 ## 版本规则
