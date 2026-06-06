@@ -4,7 +4,7 @@
 
 **Goal:** 建立可协作、可检查、可同步的 `patents-workflow` 本地开发仓库，并把 15 个声明的 skill 纳入仓库。
 
-**Architecture:** 仓库只作为开发源，不作为 Codex 实时 skill 根目录。`manifest.json` 是唯一 skill 清单来源；同步脚本按 manifest 把 `skills/<skill-name>` 同步到 `C:\Users\spade k\.codex\skills\<skill-name>`；发布前检查脚本验证仓库是否可提交、可协作、可发布。
+**Architecture:** 仓库作为可提交、可协作、可发布的版本化来源；`C:\Users\spade k\.codex\skills` 是日常使用和试改的 live 目录。`manifest.json` 是唯一 skill 清单来源；正向同步脚本把仓库同步到 live 目录；反向导入脚本把 live 目录中的修改回灌到仓库；发布前检查脚本验证仓库是否可提交、可协作、可发布。
 
 **Tech Stack:** PowerShell 5+、Git、JSON、Markdown、Codex skill 目录规范。
 
@@ -21,7 +21,8 @@
 - `.gitignore`：排除 Python 缓存、测试缓存、临时文件、本地环境文件。
 - `docs/development.md`：中文开发说明，解释版本、同步、检查、发布流程。
 - `scripts/check-release.ps1`：读取 manifest 并做发布前检查。
-- `scripts/sync-to-codex-skills.ps1`：默认 dry-run，同步时显式传入 `-Apply`。
+- `scripts/sync-to-codex-skills.ps1`：仓库到 live 目录的正向同步，默认 dry-run，同步时显式传入 `-Apply`。
+- `scripts/import-from-codex-skills.ps1`：live 目录到仓库的反向导入，默认 dry-run，导入时显式传入 `-Apply`。
 - `skills/`：15 个 skill 的开发副本，不包含 `__pycache__/`、`*.pyc` 等缓存产物。
 
 ## Task 1: 创建仓库治理文件
@@ -105,7 +106,7 @@ Thumbs.db
 ```markdown
 # patents-workflow
 
-`patents-workflow` 是一个中文专利工作流 skill 套件开发仓库。仓库用于协作开发、发布前检查和版本管理；Codex 实际使用的 skill 仍同步到 `C:\Users\spade k\.codex\skills`。
+`patents-workflow` 是一个中文专利工作流 skill 套件开发仓库。仓库用于协作开发、发布前检查和版本管理；Codex 实际使用和试改的 skill 位于 `C:\Users\spade k\.codex\skills`，通过脚本与仓库双向同步。
 
 ## 当前版本
 
@@ -150,7 +151,7 @@ Thumbs.db
 - 建立 `patents-workflow` 本地开发仓库。
 - 纳入 9 个 `cn-patent-*` 核心专利工作流 skill。
 - 纳入 6 个支撑型 vendored skill。
-- 添加 manifest、同步脚本和发布前检查脚本。
+- 添加 manifest、双向同步脚本和发布前检查脚本。
 ```
 
 `CONTRIBUTING.md` 必须包含：
@@ -205,13 +206,25 @@ This repository is being prepared for collaborative development. A public open-s
 
 ## 同步流程
 
-先 dry-run：
+日常开发通常先在 `C:\Users\spade k\.codex\skills` 下直接修改和试用。完成一轮修改后，先反向导入 dry-run：
+
+```powershell
+.\scripts\import-from-codex-skills.ps1
+```
+
+确认输出后再实际导入到开发仓库：
+
+```powershell
+.\scripts\import-from-codex-skills.ps1 -Apply
+```
+
+需要把仓库内容部署回 Codex live 目录时，先正向同步 dry-run：
 
 ```powershell
 .\scripts\sync-to-codex-skills.ps1
 ```
 
-确认输出后再实际同步：
+确认输出后再实际同步到 live 目录：
 
 ```powershell
 .\scripts\sync-to-codex-skills.ps1 -Apply
@@ -222,7 +235,21 @@ This repository is being prepared for collaborative development. A public open-s
 仓库名保持 `patents-workflow` 不变。版本通过 `VERSION`、`manifest.json`、`CHANGELOG.md`、git tag 和 GitHub Release 管理。
 ```
 
-## 同步到 Codex
+## 从 Codex live 目录导入
+
+默认 dry-run：
+
+```powershell
+.\scripts\import-from-codex-skills.ps1
+```
+
+实际导入：
+
+```powershell
+.\scripts\import-from-codex-skills.ps1 -Apply
+```
+
+## 同步到 Codex live 目录
 
 默认 dry-run：
 
@@ -465,10 +492,11 @@ git commit -m "Add release check script"
 
 Expected: commit 成功。
 
-## Task 4: 实现同步脚本
+## Task 4: 实现双向同步脚本
 
 **Files:**
 - Create: `scripts/sync-to-codex-skills.ps1`
+- Create: `scripts/import-from-codex-skills.ps1`
 
 - [ ] **Step 1: 写入 `scripts/sync-to-codex-skills.ps1`**
 
@@ -540,7 +568,87 @@ if (-not $Apply) {
 }
 ```
 
-- [ ] **Step 2: 运行 dry-run**
+- [ ] **Step 2: 写入 `scripts/import-from-codex-skills.ps1`**
+
+内容：
+
+```powershell
+param(
+  [switch]$Apply,
+  [string]$SourceRoot = 'C:\Users\spade k\.codex\skills'
+)
+
+$ErrorActionPreference = 'Stop'
+
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+$ManifestPath = Join-Path $RepoRoot 'manifest.json'
+$SkillsRoot = Join-Path $RepoRoot 'skills'
+$manifest = Get-Content -LiteralPath $ManifestPath -Raw | ConvertFrom-Json
+
+function Copy-SkillClean {
+  param(
+    [string]$Source,
+    [string]$Destination
+  )
+
+  if (Test-Path -LiteralPath $Destination) {
+    Remove-Item -LiteralPath $Destination -Recurse -Force
+  }
+
+  New-Item -ItemType Directory -Path $Destination -Force | Out-Null
+
+  $items = Get-ChildItem -LiteralPath $Source -Recurse -Force
+  foreach ($item in $items) {
+    $relative = $item.FullName.Substring($Source.Length).TrimStart('\', '/')
+    if ($relative -match '(^|[\\/])(__pycache__|\.pytest_cache|\.mypy_cache|\.ruff_cache)([\\/]|$)|\.py[co]$') {
+      continue
+    }
+
+    $target = Join-Path $Destination $relative
+    if ($item.PSIsContainer) {
+      New-Item -ItemType Directory -Path $target -Force | Out-Null
+    } else {
+      $parent = Split-Path -Parent $target
+      New-Item -ItemType Directory -Path $parent -Force | Out-Null
+      Copy-Item -LiteralPath $item.FullName -Destination $target -Force
+    }
+  }
+}
+
+if ($Apply) {
+  $status = git -C $RepoRoot status --porcelain
+  if ($LASTEXITCODE -ne 0) {
+    throw 'Unable to inspect git status before import.'
+  }
+  if ($status) {
+    throw 'Refusing to import into a dirty repository. Commit or stash repository changes first.'
+  }
+}
+
+foreach ($skill in $manifest.skills) {
+  $skillName = [string]$skill.name
+  $source = Join-Path $SourceRoot $skillName
+  $destination = Join-Path $SkillsRoot $skillName
+  $skillMd = Join-Path $source 'SKILL.md'
+
+  if (-not (Test-Path -LiteralPath $skillMd)) {
+    throw "Live skill missing SKILL.md: $source"
+  }
+
+  if ($Apply) {
+    Write-Host "Importing $skillName -> $destination"
+    Copy-SkillClean -Source $source -Destination $destination
+  } else {
+    Write-Host "[dry-run] Would import $skillName -> $destination"
+  }
+}
+
+if (-not $Apply) {
+  Write-Host 'Dry-run complete. Re-run with -Apply to write changes.'
+}
+```
+
+- [ ] **Step 3: 运行正向同步 dry-run**
 
 Run:
 
@@ -550,13 +658,23 @@ Run:
 
 Expected: 每个 skill 输出一行 `[dry-run] Would sync ...`，最后输出 `Dry-run complete. Re-run with -Apply to write changes.`
 
-- [ ] **Step 3: 提交 Task 4**
+- [ ] **Step 4: 运行反向导入 dry-run**
 
 Run:
 
 ```powershell
-git add scripts/sync-to-codex-skills.ps1
-git commit -m "Add Codex skill sync script"
+.\scripts\import-from-codex-skills.ps1
+```
+
+Expected: 每个 skill 输出一行 `[dry-run] Would import ...`，最后输出 `Dry-run complete. Re-run with -Apply to write changes.`
+
+- [ ] **Step 5: 提交 Task 4**
+
+Run:
+
+```powershell
+git add scripts/sync-to-codex-skills.ps1 scripts/import-from-codex-skills.ps1
+git commit -m "Add bidirectional Codex skill sync scripts"
 ```
 
 Expected: commit 成功。
@@ -576,7 +694,17 @@ Run:
 
 Expected: `Release check passed.`
 
-- [ ] **Step 2: 运行同步 dry-run**
+- [ ] **Step 2: 运行反向导入 dry-run**
+
+Run:
+
+```powershell
+.\scripts\import-from-codex-skills.ps1
+```
+
+Expected: 15 个 skill 的 dry-run 导入输出。
+
+- [ ] **Step 3: 运行同步 dry-run**
 
 Run:
 
@@ -586,7 +714,7 @@ Run:
 
 Expected: 15 个 skill 的 dry-run 同步输出。
 
-- [ ] **Step 3: 检查 Git 状态**
+- [ ] **Step 4: 检查 Git 状态**
 
 Run:
 
@@ -596,7 +724,7 @@ git status --short
 
 Expected: 无输出。
 
-- [ ] **Step 4: 记录当前提交历史**
+- [ ] **Step 5: 记录当前提交历史**
 
 Run:
 
