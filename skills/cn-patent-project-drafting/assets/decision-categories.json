@@ -1,0 +1,93 @@
+{
+  "_schema": {
+    "version": "v2",
+    "description": "Gate A 段起草前决策类目配置。每个 entry 描述类目元数据 + 命中规则 + 候选项来源 + state 写入字段。编排器读此 json 在 Gate A 段起草前决策子阶段循环执行。",
+    "hit_rule_types": {
+      "always_hit": "始终命中",
+      "evidence_pattern_present": "evidence-matrix.md 含指定关键词条目",
+      "count_grouped_by_field_gte": "按 group_by 分组后,某类总数 >= threshold",
+      "list_field_contains_value": "列表字段 contains 指定值"
+    }
+  },
+  "C1_title": {
+    "label": "题目",
+    "hit_rule": {
+      "type": "always_hit"
+    },
+    "candidate_source": ["selected_direction.title", "prior_art_search.recommended_mainline"],
+    "candidate_min_count": 2,
+    "candidate_fallback": "agent 基于 selected_direction 补到 2~3 项",
+    "question_template": "本案题目候选有：{candidates}。请选定一个。",
+    "write_to_state": "selected_title"
+  },
+  "C2_prior_self_application": {
+    "label": "同方向在先申请引用",
+    "hit_rule": {
+      "type": "evidence_pattern_present",
+      "patterns": ["同申请人在先申请", "同方向在先成果", "在先申请条目"],
+      "source_file": "evidence-matrix.md"
+    },
+    "candidate_source": ["evidence-matrix.md#在先申请清单"],
+    "question_template": "检测到同申请人在先申请 {refs}。本案处理方式？",
+    "options": ["背景引用", "实施例引用", "不引用"],
+    "write_to_state": "gate_a.drafting_decisions.categories.C2_prior_self_application.answer"
+  },
+  "C3_commercial_evidence_disclosure": {
+    "label": "商业/量产证据披露",
+    "hit_rule": {
+      "type": "evidence_pattern_present",
+      "patterns": ["SKU", "固件版本", "上线数据", "量产数据", "用户量"],
+      "source_file": "evidence-matrix.md"
+    },
+    "candidate_source": ["evidence-matrix.md#证据条目列表"],
+    "question_template": "本案是否在说明书中披露量产/商业证据？影响有益效果具体数值。",
+    "options": ["披露", "不披露", "脱敏披露"],
+    "write_to_state": "gate_a.drafting_decisions.categories.C3_commercial_evidence_disclosure.answer"
+  },
+  "C4_protection_object_combination": {
+    "label": "保护客体组合",
+    "hit_rule": {
+      "type": "always_hit"
+    },
+    "candidate_source": ["mainline-analysis.md#保护客体初步判断"],
+    "candidate_fallback": "常见组合(方法 / 方法+装置 / 方法+装置+介质 / 方法+装置+电子设备+介质 / 系统类)",
+    "question_template": "推荐保护客体组合：{recommended}。请选定。",
+    "write_to_state": "selected_protection_object"
+  },
+  "C5_invention_point_drafting": {
+    "label": "关键发明点写法",
+    "hit_rule": {
+      "type": "count_grouped_by_field_gte",
+      "list_field": "claimable_invention_points",
+      "threshold": 2
+    },
+    "candidate_source": ["claimable_invention_points"],
+    "question_template": "{ip_name} 的写法选择？",
+    "options": ["内置独权", "独立从权", "实施例支撑"],
+    "write_to_state": "gate_a.drafting_decisions.categories.C5_invention_point_drafting.answers"
+  },
+  "C6_marginal_claim_division": {
+    "label": "边缘权要本案 vs 分案",
+    "hit_rule": {
+      "type": "list_field_contains_value",
+      "list_field": "invention_points",
+      "values": ["分案保留", "暂不写入"]
+    },
+    "candidate_source": ["invention_points filter use in [分案保留, 暂不写入]"],
+    "question_template": "{ip_name} 在本案的安置？",
+    "options": ["本案", "留分案", "放弃"],
+    "write_to_state": "gate_a.drafting_decisions.categories.C6_marginal_claim_division.answers"
+  },
+  "C7_claim_scope_limit": {
+    "label": "权要适用范围",
+    "hit_rule": {
+      "type": "list_field_contains_value",
+      "list_field": "distinguishing_features",
+      "values": ["容器限定", "场景限定", "平台限定"]
+    },
+    "candidate_source": ["distinguishing_features"],
+    "question_template": "权要适用范围选择？",
+    "options": ["严格限定", "写宽到上位概念", "多档可选"],
+    "write_to_state": "gate_a.drafting_decisions.categories.C7_claim_scope_limit.answer"
+  }
+}

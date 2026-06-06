@@ -1,0 +1,282 @@
+{
+  "project_name": "",
+  "project_root": ".",
+  "state_version": "v0.1",
+  "current_stage": "step-0",
+  "updated_at": "",
+  "env_check_path": "patent/<patent-slug>/state/env-check.json",
+  "evidence_matrix_path": "patent/<patent-slug>/evidence/evidence-matrix.md",
+  "mainline_analysis_path": "patent/<patent-slug>/analysis/mainline-analysis.md",
+  "source_material_roles": {
+    "declared_at": "",
+    "role_policy": "用户声明为原创资料、核心资料、论文资料、代码资料或技术交底的内容仅作为发明证据；参考样稿仅用于结构、格式、段落层级和措辞风格，不自动作为发明点来源、现有技术或参考文献。",
+    "items": []
+  },
+  "selected_direction": {
+    "source": "",
+    "slug": "",
+    "title": "",
+    "summary": "",
+    "source_material_roles_path": ""
+  },
+  "protection_path_candidates": [],
+  "feature_layers": [
+    {
+      "id": "",
+      "level": "",
+      "feature": "",
+      "technical_role": "",
+      "technical_effect": "",
+      "subject": "",
+      "drafting_position": "",
+      "evidence": "",
+      "open_issue": ""
+    }
+  ],
+  "invention_points": [],
+  "claimable_invention_points": [],
+  "selected_title": "",
+  "selected_mainline": "",
+  "selected_protection_object": "",
+  "current_draft_path": "",
+  "draft_evidence_notes_path": "",
+  "embodiment_coverage_plan_path": "",
+  "figure_generation_plan_path": "",
+  "figure_manifest_path": "",
+  "step_3": {
+    "stage": "pending",
+    "status": "pending",
+    "pre_draft_review": {
+      "verdict": null,
+      "decision_readiness": null,
+      "risk_acknowledged": false,
+      "report_path": null,
+      "risk_inputs": [],
+      "chain_check": {
+        "status": "pending",
+        "broken_items": []
+      },
+      "proposal_summary_oneliner": null
+    },
+    "disclosure_draft": {
+      "status": "pending",
+      "draft_path": null
+    },
+    "post_disclosure_decision": {
+      "choice": null,
+      "revise_count": 0
+    },
+    "inventor_review": {
+      "round_count": 0,
+      "stage_1_status": null,
+      "stage_1_feedback": null,
+      "stage_2_status": null,
+      "stage_2_feedback": null,
+      "stage_3_status": null,
+      "stage_3_feedback": null,
+      "exit_status": null,
+      "gate_passed": false
+    }
+  },
+  "gate_a": {
+    "stage": "pending",
+    "status": "pending",
+    "risk_review": {
+      "acknowledged_at": null,
+      "displayed_risk_ids": []
+    },
+    "drafting_decisions": {
+      "status": "pending",
+      "categories": {}
+    },
+    "gate_a_confirmation": {
+      "user_confirmation": null,
+      "passed_at": null
+    }
+  },
+  "handoff": {
+    "status": "not_initiated",
+    "package_path": null,
+    "patent_dept_notes_path": null,
+    "drafting_initiator": null,
+    "packaged_at": null,
+    "picked_up_at": null,
+    "notes_decision_at": null,
+    "notes_fill_mode": null,
+    "notes_source_document": null
+  },
+  "gate_b": {
+    "status": "pending",
+    "confirmed_at": "",
+    "review_direction": "",
+    "evidence_scope": "",
+    "authorized_revision_scope": "",
+    "blocking_reason": ""
+  },
+  "gate_c": {
+    "status": "pending",
+    "confirmed_at": "",
+    "readiness_decision": "",
+    "docx_export_authorized": false,
+    "blocking_reason": ""
+  },
+  "autonomous_iteration": {
+    "max_rounds": 3,
+    "current_round": 0,
+    "stop_when": [
+      "quality-check-pass",
+      "blocking-question-found",
+      "max-rounds-reached"
+    ],
+    "notes": ""
+  },
+  "blocking_questions": [],
+  "attorney_review_status": {
+    "required": true,
+    "status": "not-started",
+    "latest_review_notes_path": "",
+    "latest_user_feedback_path": "",
+    "notes": ""
+  },
+  "deliverable_readiness": {
+    "status": "not-ready",
+    "quality_check_path": "",
+    "docx_export_allowed": false,
+    "remaining_risks": [],
+    "notes": ""
+  },
+  "prior_art_search": {
+    "status": "not-started",
+    "search_date": "",
+    "report_path": "",
+    "queries": [],
+    "patent_sources": [],
+    "paper_sources": [],
+    "closest_items": [],
+    "recommended_mainline": "",
+    "notes": "",
+    "ipc_classifications": {
+      "primary": [],
+      "secondary": []
+    },
+    "target_assignees": [],
+    "paths_attempted": []
+  },
+  "closest_prior_art": "",
+  "distinguishing_features": [],
+  "step_6": {
+    "review_mode": null,
+    "review_mode_decided_at": null,
+    "review_mode_selection_path": null,
+    "multi_agent_dispatch": {
+      "dispatched_at": null,
+      "subagent_count": 0,
+      "sub_review_paths": []
+    },
+    "synthesis_subagent_dispatched_at": null
+  },
+  "step_8": {
+    "revision_subagent_dispatched": false,
+    "revision_subagent_dispatched_at": null,
+    "revision_changelog_path": null
+  },
+  "review_feedback": {
+    "status": "not-started",
+    "latest_review_notes_path": "",
+    "latest_user_feedback_path": "",
+    "latest_revised_draft_path": "",
+    "pre_review_risk_acknowledged": false,
+    "pre_review_risk_acknowledged_at": null,
+    "pre_review_risk_acknowledged_items": [],
+    "notes": ""
+  },
+  "glossary": [
+    {
+      "preferred": "平面参考路径",
+      "aliases": [
+        "参考轨迹",
+        "平面轨迹"
+      ]
+    },
+    {
+      "preferred": "共形路径",
+      "aliases": [
+        "曲面轨迹"
+      ]
+    }
+  ],
+  "evidence_baseline": [],
+  "history": {
+    "title_candidates": [
+      {
+        "version": "v0.1",
+        "date": "",
+        "candidates": [
+          "",
+          "",
+          ""
+        ],
+        "decision": "",
+        "notes": ""
+      }
+    ],
+    "mainline_reviews": [
+      {
+        "version": "v0.1",
+        "date": "",
+        "candidate": "",
+        "decision": "",
+        "evidence": [],
+        "notes": ""
+      }
+    ],
+    "prior_art_rounds": [
+      {
+        "version": "v0.1",
+        "date": "",
+        "report_path": "",
+        "queries": [],
+        "recommended_mainline": "",
+        "decision": "",
+        "notes": ""
+      }
+    ],
+    "outline_versions": [
+      {
+        "version": "v0.1",
+        "date": "",
+        "path": "",
+        "summary": ""
+      }
+    ],
+    "claim_versions": [
+      {
+        "version": "v0.1",
+        "date": "",
+        "path": "",
+        "summary": ""
+      }
+    ],
+    "formal_draft_versions": [
+      {
+        "version": "v0.1",
+        "date": "",
+        "path": "",
+        "summary": ""
+      }
+    ],
+    "attorney_review_rounds": [
+      {
+        "version": "r1",
+        "date": "",
+        "draft_path": "",
+        "review_notes_path": "",
+        "user_feedback_path": "",
+        "revised_draft_path": "",
+        "decision": "",
+        "notes": ""
+      }
+    ]
+  },
+  "open_questions": []
+}
