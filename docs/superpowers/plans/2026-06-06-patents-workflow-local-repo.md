@@ -1,5 +1,7 @@
 # Patents Workflow Local Repository Implementation Plan
 
+> 状态：已被 `2026-06-06-patents-workflow-junction-setup.md` 替代。原因：用户确认采用 Windows directory junction，让 `.codex\skills\<skill-name>` 直接指向 `patents-workflow\skills\<skill-name>`，不再采用双向同步脚本模型。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** 建立可协作、可检查、可同步的 `patents-workflow` 本地开发仓库，并把 15 个声明的 skill 纳入仓库。

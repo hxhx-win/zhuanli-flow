@@ -1,0 +1,22 @@
+{
+  "name": "patents-workflow",
+  "version": "1.6.0",
+  "description": "中文专利工作流 skill 套件，包含专利起草主流程和支撑型可视化、绘图、Markdown skill。",
+  "skills": [
+    { "name": "cn-patent-repo-scout", "role": "core" },
+    { "name": "cn-patent-mainline-analysis", "role": "core" },
+    { "name": "cn-patent-prior-art-search", "role": "core" },
+    { "name": "cn-patent-disclosure-draft", "role": "core" },
+    { "name": "cn-patent-disclosure-review", "role": "core" },
+    { "name": "cn-patent-formal-drafting", "role": "core" },
+    { "name": "cn-patent-attorney-review", "role": "core" },
+    { "name": "cn-patent-docx-export", "role": "core" },
+    { "name": "cn-patent-project-drafting", "role": "core" },
+    { "name": "seaborn", "role": "vendored" },
+    { "name": "scientific-visualization", "role": "vendored" },
+    { "name": "scientific-schematics", "role": "vendored" },
+    { "name": "matplotlib", "role": "vendored" },
+    { "name": "markdown-mermaid-writing", "role": "vendored" },
+    { "name": "generate-image", "role": "vendored" }
+  ]
+}

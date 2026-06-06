@@ -68,9 +68,8 @@ patents-workflow/
       specs/
         2026-06-06-patents-workflow-repo-design.md
   scripts/
-    sync-to-codex-skills.ps1
-    import-from-codex-skills.ps1
     check-release.ps1
+    check-live-links.ps1
   skills/
     cn-patent-repo-scout/
     cn-patent-mainline-analysis/
@@ -91,23 +90,25 @@ patents-workflow/
 
 每个 skill 都是 `skills/` 的直接子目录，并且每个 skill 目录内必须直接包含自己的 `SKILL.md`。同步后，每个 skill 会被复制到 `C:\Users\spade k\.codex\skills\<skill-name>`，从而保持 Codex 现有的 skill 发现机制不变。
 
-## 同步策略
+## Live 链接策略
 
-`scripts/sync-to-codex-skills.ps1` 负责从开发仓库同步到 Codex 实际使用的 skill 目录。`scripts/import-from-codex-skills.ps1` 负责从 Codex 实际使用目录反向导入到开发仓库。
+实际开发习惯以 `C:\Users\spade k\.codex\skills` 为主：用户通常会直接在 live skill 目录内修改和试用。为避免反复运行同步脚本，本仓库采用 Windows directory junction 方案。
 
-两个脚本的默认行为都是 dry-run，只报告将要复制、删除或覆盖的内容。只有显式传入执行参数时，脚本才会写入目标目录。
+每个本套件 skill 在 `.codex\skills` 下仍保持直接子目录形态，但该目录是指向开发仓库对应目录的 junction：
 
-实际开发习惯以 `C:\Users\spade k\.codex\skills` 为主：用户通常会直接在 live skill 目录内修改和试用。完成一轮修改后，先运行反向导入 dry-run，再显式导入到 `patents-workflow/skills/`，随后提交到 git。需要把仓库版本部署回 Codex 时，再运行正向同步。
+```text
+C:\Users\spade k\.codex\skills\<skill-name>
+  -> C:\Users\spade k\patents-workflow\skills\<skill-name>
+```
 
 预期行为：
 
-- 从 `manifest.json` 读取 skill 列表
-- 只复制 manifest 中声明的 skill 目录
-- 排除缓存和生成物，例如 `__pycache__/`、`*.pyc`、`.pytest_cache/`、`.mypy_cache/`、`.ruff_cache/`
-- 如果源 skill 目录缺少 `SKILL.md`，拒绝执行
-- 不触碰 `C:\Users\spade k\.codex\skills` 中不属于本套件的其他 skill
-- 反向导入不触碰仓库中不属于 manifest 的目录
-- 反向导入前如果开发仓库工作区不干净，脚本必须拒绝实际写入，避免覆盖未提交变更；dry-run 仍可运行
+- 先把 manifest 声明的 skill 复制到 `patents-workflow/skills/`
+- 清理复制后的缓存和生成物，例如 `__pycache__/`、`*.pyc`、`.pytest_cache/`、`.mypy_cache/`、`.ruff_cache/`
+- 验证每个仓库 skill 目录都包含 `SKILL.md`
+- 将 `.codex\skills` 下对应原目录移动到备份目录，再创建同名 junction
+- 不触碰 `.codex\skills` 中不属于 manifest 的其他 skill
+- 后续直接修改 `.codex\skills\<skill-name>` 时，实际修改的是仓库中的文件，Git 可直接跟踪变更
 
 ## 发布前检查策略
 
@@ -122,6 +123,7 @@ patents-workflow/
 - 仓库中不存在明显的 secret 模式
 - README 中声明的 skill 列表与 `manifest.json` 一致
 - `VERSION` 与 `manifest.json.version` 一致
+- `.codex\skills` 下 manifest 声明的 live 目录可通过 `scripts/check-live-links.ps1` 验证为指向仓库的 junction
 
 第一版实现可以保持检查逻辑简单、确定、可重复。仓库稳定后再逐步加入更严格的校验。
 
@@ -152,6 +154,6 @@ patents-workflow/
 - 本地 git 仓库已存在
 - 15 个声明的 skill 已复制到 `skills/`，且不包含缓存产物
 - 仓库治理文件已存在
-- 正向同步脚本、反向导入脚本和发布前检查脚本已存在
+- 发布前检查脚本和 live 链接检查脚本已存在
 - 发布前检查通过
-- Codex 实际 skill 发现布局保持兼容
+- `.codex\skills` 下 manifest 声明的 live skill 已替换为指向仓库目录的 junction，Codex 实际 skill 发现布局保持兼容
