@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 建立 `patents-workflow` 开发仓库，并把 `.codex/skills` 下 15 个 live skill 替换为指向仓库 skill 目录的本机 live link。
+**Goal:** 建立 `patents-workflow` 开发仓库，并支持把 Codex 或 Claude Code 的 live skill 目录替换为指向仓库 skill 目录的本机 live link。
 
-**Architecture:** `<repo>/skills/<skill-name>` 是真实文件位置；`~/.codex/skills/<skill-name>` 是 live link。用户可以继续在 `.codex/skills` 下修改和试用，Git 会在 `patents-workflow` 仓库中直接看到变更。
+**Architecture:** `<repo>/skills/<skill-name>` 是真实文件位置；`~/.codex/skills/<skill-name>` 或 `~/.claude/skills/<skill-name>` 是 live link。用户可以继续在 agent live skill 目录下修改和试用，Git 会在 `patents-workflow` 仓库中直接看到变更。
 
 **Tech Stack:** Python、Git、Windows directory junction 或 symlink、Markdown、JSON。
 
@@ -23,7 +23,7 @@
 - Create: `docs/development.md`
 
 - [ ] 写入版本、manifest、README、贡献指南、变更记录、保留权利声明和开发说明。
-- [ ] README 必须说明：`.codex/skills/<skill-name>` 指向当前 clone 的 `skills/<skill-name>`。
+- [ ] README 必须说明：Codex 和 Claude Code 的 live skill 目录可指向当前 clone 的 `skills/<skill-name>`。
 - [ ] 提交：`添加仓库治理文件`
 
 ## Task 2: 导入并清理 skill
@@ -44,19 +44,19 @@
 - Create: `scripts/link-live-skills.py`
 
 - [ ] `check-release.py` 检查 manifest、VERSION、README、SKILL.md frontmatter、缓存产物和明显 secret。
-- [ ] `check-live-links.py` 检查 `.codex/skills` 下 15 个 live 目录是否为 live link，且目标指向仓库 `skills/`。
-- [ ] `link-live-skills.py` 以当前用户 `~/.codex/skills` 为默认 live root，并支持 `--live-root` 覆盖，不能硬编码本机路径。
+- [ ] `check-live-links.py` 按 `--agent codex|claude` 检查 15 个 live 目录是否为 live link，且目标指向仓库 `skills/`。
+- [ ] `link-live-skills.py` 以 `--agent codex|claude` 选择默认 live root，并支持 `--live-root` 覆盖，不能硬编码本机路径。
 - [ ] 运行两个检查脚本，确认 release check 在创建 junction 前可通过，live links check 在创建 junction 前应报告尚未链接。
 - [ ] 提交：`添加仓库检查脚本`
 
 ## Task 4: 替换 live 目录为 live link
 
 **Files:**
-- Modify outside repo: `~/.codex/skills/<skill-name>`
+- Modify outside repo: `~/.codex/skills/<skill-name>` 或 `~/.claude/skills/<skill-name>`
 
-- [ ] 创建备份目录：`~/.codex/skills/.patents-workflow-backup-<timestamp>`。
+- [ ] 创建备份目录：`<live-root>/.patents-workflow-backup-<agent>-<timestamp>`。
 - [ ] 对 manifest 中 15 个 skill：确认仓库源目录存在且有 `SKILL.md`。
-- [ ] 将 `.codex/skills/<skill-name>` 原目录移动到备份目录。
+- [ ] 将 `<live-root>/<skill-name>` 原目录移动到备份目录。
 - [ ] 创建同名 live link，指向当前 clone 的 `skills/<skill-name>`。
 - [ ] 运行 `python scripts/check-live-links.py`，确认全部 live 目录指向当前 clone。
 

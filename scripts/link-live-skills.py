@@ -11,7 +11,10 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = REPO_ROOT / "manifest.json"
 SKILLS_ROOT = REPO_ROOT / "skills"
-DEFAULT_LIVE_ROOT = Path.home() / ".codex" / "skills"
+DEFAULT_LIVE_ROOTS = {
+    "codex": Path.home() / ".codex" / "skills",
+    "claude": Path.home() / ".claude" / "skills",
+}
 
 
 def is_reparse_point(path: Path) -> bool:
@@ -52,13 +55,14 @@ def load_skill_names() -> list[str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="把当前仓库的 skills 链接到本机 Codex live skill 目录。")
-    parser.add_argument("--live-root", default=str(DEFAULT_LIVE_ROOT), help="live skill 根目录，默认是当前用户 ~/.codex/skills")
+    parser = argparse.ArgumentParser(description="把当前仓库的 skills 链接到本机 agent live skill 目录。")
+    parser.add_argument("--agent", choices=sorted(DEFAULT_LIVE_ROOTS), default="codex", help="目标 agent，默认 codex")
+    parser.add_argument("--live-root", help="live skill 根目录；不传时按 --agent 使用当前用户默认目录")
     parser.add_argument("--apply", action="store_true", help="实际移动已有目录并创建 junction/symlink；不加时只预览")
     args = parser.parse_args()
 
-    live_root = Path(args.live_root).expanduser().resolve()
-    backup_root = live_root / f".patents-workflow-backup-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    live_root = Path(args.live_root or DEFAULT_LIVE_ROOTS[args.agent]).expanduser().resolve()
+    backup_root = live_root / f".patents-workflow-backup-{args.agent}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     actions: list[str] = []
     errors: list[str] = []
 

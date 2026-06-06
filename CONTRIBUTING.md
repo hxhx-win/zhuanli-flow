@@ -15,7 +15,7 @@
 ~/.codex/skills/<skill-name>
 ```
 
-这些目录应通过 `python scripts/link-live-skills.py --apply` 指向当前 clone 的仓库目录，真实文件在：
+这些目录应通过 `python scripts/link-live-skills.py --agent codex --apply` 或 `python scripts/link-live-skills.py --agent claude --apply` 指向当前 clone 的仓库目录，真实文件在：
 
 ```text
 <repo>/skills/<skill-name>
