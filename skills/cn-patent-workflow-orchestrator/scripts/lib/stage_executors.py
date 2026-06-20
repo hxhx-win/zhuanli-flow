@@ -97,8 +97,8 @@ STAGE_EXECUTORS: Dict[str, Dict[str, Any]] = {
         "executor": "orchestrator",
         "type": "main_agent_ask_user",
         "must_load": [
-            "/root/.claude/skills/cn-patent-project-drafting/assets/decision-categories.json",
-            "/root/.claude/skills/cn-patent-project-drafting/references/drafting-decisions.md",
+            "/root/.claude/skills/cn-patent-workflow-orchestrator/assets/decision-categories.json",
+            "/root/.claude/skills/cn-patent-workflow-orchestrator/references/drafting-decisions.md",
         ],
         "do_not_merge_user_questions": True,
     },

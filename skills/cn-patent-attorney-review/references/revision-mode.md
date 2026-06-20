@@ -1,6 +1,6 @@
 # revision Mode 契约
 
-> step 8「用户反馈修订」由 `cn-patent-project-drafting` 编排器派 revision subagent 执行，subagent 内部调用本 SKILL 的 step 7「按用户反馈修订」流程。归属本 SKILL 而非 `cn-patent-formal-drafting`，理由：本 SKILL.md 步骤 7 本就承载修订职能（详见 SKILL.md 工作流表）。
+> step 8「用户反馈修订」由 `cn-patent-workflow-orchestrator` 编排器派 revision subagent 执行，subagent 内部调用本 SKILL 的 step 7「按用户反馈修订」流程。归属本 SKILL 而非 `cn-patent-formal-drafting`，理由：本 SKILL.md 步骤 7 本就承载修订职能（详见 SKILL.md 工作流表）。
 
 ## subagent 输入契约
 
@@ -13,7 +13,7 @@
 | 当前正式稿（最新版 markdown 绝对路径） | 修订基底 |
 | 当前 evidence notes（最新版） | 修订基底 + 支撑矩阵更新 |
 | `reviews/attorney-review.md`（综合审稿） | 修订总目标——已含跨方向同根因合并 + 冲突取整 |
-| `reviews/user-feedback.md` | 用户决策（哪些 review 项接受 / 否定 / 推迟）；结构契约见 `../cn-patent-project-drafting/assets/user-feedback-decision.template.md`；高 / 中优先级两节内**允许**用 `by_article: { "22.3": [...], "26.3": [...] }` 索引承载法条维度的逐条决策 |
+| `reviews/user-feedback.md` | 用户决策（哪些 review 项接受 / 否定 / 推迟）；结构契约见 `../cn-patent-workflow-orchestrator/assets/user-feedback-decision.template.md`；高 / 中优先级两节内**允许**用 `by_article: { "22.3": [...], "26.3": [...] }` 索引承载法条维度的逐条决策 |
 
 ### 按需 Read（不预加载）
 

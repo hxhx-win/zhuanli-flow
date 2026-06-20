@@ -26,9 +26,9 @@
 
 唯一落盘文件：`patent/<patent-slug>/evidence/prior-art-search-report.md`（各逻辑产出对应章节见 `SKILL.md` 输出物表）。
 
-模板：`cn-patent-project-drafting/assets/prior-art-search-report.template.md`
+模板：`cn-patent-workflow-orchestrator/assets/prior-art-search-report.template.md`
 
-编排模式初始化：N8 在首次落盘前直接以 `cn-patent-project-drafting/assets/prior-art-search-report.template.md` 为模板 Write 到 `patent/<patent-slug>/evidence/prior-art-search-report.md`，无需独立初始化脚本。
+编排模式初始化：N8 在首次落盘前直接以 `cn-patent-workflow-orchestrator/assets/prior-art-search-report.template.md` 为模板 Write 到 `patent/<patent-slug>/evidence/prior-art-search-report.md`，无需独立初始化脚本。
 
 ## 主线筛选判断口径
 

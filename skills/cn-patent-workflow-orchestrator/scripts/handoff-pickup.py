@@ -2,7 +2,7 @@
 """handoff-pickup.py — 专利部门启动编排器后用户确认接手时调用,切 state.handoff.status = picked_up,
 并自动从模板创建 patent/<slug>/reviews/patent-dept-notes.md(若不存在)。
 
-调用位置:cn-patent-project-drafting 编排器在启动后检测到 handoff.status == packaged,
+调用位置:cn-patent-workflow-orchestrator 编排器在启动后检测到 handoff.status == packaged,
         AskUserQuestion 三选用户回答"我是专利部门,接手起草"时。
 
 输入:

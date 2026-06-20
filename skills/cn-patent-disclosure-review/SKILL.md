@@ -5,7 +5,7 @@ description: 当用户已有技术版交底书初稿（通常由 `cn-patent-disc
 
 # 发明人交底初稿审核 skill
 
-主跑型 skill，在 `step-3.inventor-review` 阶段由 `cn-patent-project-drafting` 编排器加载，引导用户对交底初稿做 3 阶段审核。
+主跑型 skill，在 `step-3.inventor-review` 阶段由 `cn-patent-workflow-orchestrator` 编排器加载，引导用户对交底初稿做 3 阶段审核。
 
 ## 入口前置
 
@@ -37,7 +37,7 @@ description: 当用户已有技术版交底书初稿（通常由 `cn-patent-disc
 - 硬限 3 轮 → 触发 escalation 三档（见 protocols.md）
 
 **REQUIRED SUB-SKILL：** 修订调用 `cn-patent-disclosure-draft` 时复用其 `references/drafting-discipline.md` 作准绳。
-**REQUIRED CONTEXT：** 状态字段约定见 `cn-patent-project-drafting/references/state-machine-reference.md`。
+**REQUIRED CONTEXT：** 状态字段约定见 `cn-patent-workflow-orchestrator/references/state-machine-reference.md`。
 
 ## 出口分支
 

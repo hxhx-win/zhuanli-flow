@@ -1,11 +1,11 @@
 ---
-name: cn-patent-project-drafting
-description: 当用户明确要求生成/起草/写/出中文发明专利、进入完整专利流程，或希望基于既有 `patent/<patent-slug>/state/patent-iteration-state.json` 继续未完成迭代时使用。也可在 `cn-patent-repo-scout` 已确认方向和核心资料后由用户选择进入。本 skill 是编排器，调度主线分析、现有技术检索、起草前评审、技术交底、发明人审核、正式稿起草、代理师审稿、DOCX 导出全流程；不直接挑方向（用 `cn-patent-repo-scout`），也不替代单步执行（已有方向只想跑某一步时用对应单 skill：`cn-patent-mainline-analysis` / `cn-patent-prior-art-search` / `cn-patent-formal-drafting` / `cn-patent-attorney-review` / `cn-patent-docx-export`）。触发词：完整专利流程、起草中文发明专利、`patent-iteration-state.json`、编排器、project drafting。
+name: cn-patent-workflow-orchestrator
+description: 当用户明确要求生成/起草/写/出中文发明专利、进入完整专利流程，或希望基于既有 `patent/<patent-slug>/state/patent-iteration-state.json` 继续未完成迭代时使用。也可在 `cn-patent-repo-scout` 已确认方向和核心资料后由用户选择进入。本 skill 是工作流编排器，调度主线分析、现有技术检索、起草前评审、技术交底、发明人审核、正式稿起草、代理师审稿、DOCX 导出全流程；不直接挑方向（用 `cn-patent-repo-scout`），也不替代单步执行（已有方向只想跑某一步时用对应单 skill：`cn-patent-mainline-analysis` / `cn-patent-prior-art-search` / `cn-patent-formal-drafting` / `cn-patent-attorney-review` / `cn-patent-docx-export`）。触发词：完整专利流程、起草中文发明专利、`patent-iteration-state.json`、工作流编排器、workflow orchestrator。
 ---
 
-# 中文发明专利通用起草（编排器）
+# 中文发明专利完整流程工作流编排器
 
-编排完整专利起草流程。本 skill 是路由器，具体规则见下方 reference + scripts。
+负责编排完整专利起草流程。本 skill 是路由器，具体规则见下方 reference + scripts。
 
 ## 入口边界
 

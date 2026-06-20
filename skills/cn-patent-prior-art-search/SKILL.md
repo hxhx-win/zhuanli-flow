@@ -61,7 +61,7 @@ description: 当用户已有已确认技术方向下的保护路径候选和候�
 
 所有路径相对于用户项目根目录，禁止写入 skill 目录。
 
-**本 skill 的 Markdown 产物收敛为单一检索报告**（与 `cn-patent-project-drafting/assets/prior-art-search-report.template.md` 结构一致）：
+**本 skill 的 Markdown 产物收敛为单一检索报告**（与 `cn-patent-workflow-orchestrator/assets/prior-art-search-report.template.md` 结构一致）：
 
 | 逻辑产出 | 文件与章节 |
 |----------|------------|
@@ -78,7 +78,7 @@ description: 当用户已有已确认技术方向下的保护路径候选和候�
 | 引用链接清单 | 同上，`## 引用链接`（**硬强制**：节必须存在且非空；每条进入候选表的专利/论文/标准/产品资料、`## 最接近现有技术` 与 DF 反例自检引用过的来源、`## 检索式` 中声明命中的目标页，都各占一行；格式 `- <编号或简称>（<角色标注，如 最接近现有技术 / DF-X 反例公知来源 / 行业背景>）：<可解析 URL>`；联网受限来源保留链接并标注「（受限：<现象>）」；缺失或全部为占位视为检索未完成） |
 | DF 反例自检信号 | `patent/<patent-slug>/evidence/df-rationale-signals.yml` | prior-art 子 agent 在写完检索报告同一次任务内产出；每条 DF 必填 counter_example_attempt + counter_example_strength；字段结构和规则见 `references/creativity-screening.md` 末尾"DF 反例自检规则" |
 
-编排模式初始化：N8 在首次落盘前直接以 `cn-patent-project-drafting/assets/prior-art-search-report.template.md` 为模板 Write 到 `patent/<patent-slug>/evidence/prior-art-search-report.md`，无需独立初始化脚本。
+编排模式初始化：N8 在首次落盘前直接以 `cn-patent-workflow-orchestrator/assets/prior-art-search-report.template.md` 为模板 Write 到 `patent/<patent-slug>/evidence/prior-art-search-report.md`，无需独立初始化脚本。
 
 独立模式：只生成/更新 `prior-art-search-report.md`，不写状态文件。
 

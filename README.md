@@ -58,7 +58,7 @@ python scripts/check-live-links.py --live-root "<path-to-skills>"
 - `cn-patent-formal-drafting`
 - `cn-patent-attorney-review`
 - `cn-patent-docx-export`
-- `cn-patent-project-drafting`
+- `cn-patent-workflow-orchestrator`
 
 支撑型 vendored skill：
 

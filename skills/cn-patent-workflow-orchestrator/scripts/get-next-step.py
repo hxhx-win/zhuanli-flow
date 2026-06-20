@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """get-next-step.py — 编排器每步完成后调用,计算下一步路由 + 识别 handoff 分支。
 
-调用位置:cn-patent-project-drafting 编排器每完成一步后,读 state 决定下一步。
+调用位置:cn-patent-workflow-orchestrator 编排器每完成一步后,读 state 决定下一步。
 
 输入:
   --state-path <path>       state 文件路径(必填,绝对或相对路径)

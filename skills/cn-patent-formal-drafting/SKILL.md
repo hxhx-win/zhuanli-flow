@@ -1,7 +1,7 @@
 ---
 name: cn-patent-formal-drafting
 description: >-
-  当用户已选定专利主线且完成证据收集（明确给出"已确认的主线 / 区别特征 / 支撑证据"，或提供的 `patent-iteration-state.json` 中 `selected_mainline` 字段已填），要求只起草 DOCX-ready 中文专利 Markdown 正式稿（摘要 + 摘要附图 + 权利要求书 + 说明书 + 附图说明 + `figure-manifest.json`）时使用。若用户从零开始（只给原始项目资料、未选主线），替代推荐：`cn-patent-project-drafting`。不挑主线、不检索、不审稿、不导出 .docx。触发词：`selected_mainline`、权利要求书、说明书、`figure-manifest.json`。
+  当用户已选定专利主线且完成证据收集（明确给出"已确认的主线 / 区别特征 / 支撑证据"，或提供的 `patent-iteration-state.json` 中 `selected_mainline` 字段已填），要求只起草 DOCX-ready 中文专利 Markdown 正式稿（摘要 + 摘要附图 + 权利要求书 + 说明书 + 附图说明 + `figure-manifest.json`）时使用。若用户从零开始（只给原始项目资料、未选主线），替代推荐：`cn-patent-workflow-orchestrator`。不挑主线、不检索、不审稿、不导出 .docx。触发词：`selected_mainline`、权利要求书、说明书、`figure-manifest.json`。
 ---
 
 # 正式稿起草
@@ -23,7 +23,7 @@ description: >-
 
 - [ ] `patent/<patent-slug>/disclosure/disclosure-draft.md`（交底书主体八节；面向读者的人读版本）
 - [ ] `patent/<patent-slug>/reviews/pre-draft-review.md`（含 risk_inputs + "起草侧处理建议"列）
-- [ ] `patent/<patent-slug>/state/drafting-context.json`（编排器在 step 4 派单前用 `cn-patent-project-drafting/scripts/extract-drafting-context.py` 生成；含 `gate_a`、`handoff`、`pre_review` 三个子树，~3 KB；起草 subagent **不再 Read state.json 全量**）
+- [ ] `patent/<patent-slug>/state/drafting-context.json`（编排器在 step 4 派单前用 `cn-patent-workflow-orchestrator/scripts/extract-drafting-context.py` 生成；含 `gate_a`、`handoff`、`pre_review` 三个子树，~3 KB；起草 subagent **不再 Read state.json 全量**）
 - [ ] 检查 `drafting-context.handoff.patent_dept_notes_path`：若非 null 且 `drafting-context.handoff.notes_fill_mode ∈ {prompt, document, manual}` → 读 `patent-dept-notes.md`（**专利部门强制意见，优先级最高**；HTML 注释跳过）；若 `notes_fill_mode = skip` 或字段缺失 → 跳过
 
 > **铁律：起草 subagent 不读 mainline-analysis.md / prior-art-search-report.md / evidence-matrix.md 三份上游产物**；上游关键内容已由上游 skill 完整落入 disclosure-draft.md 与 pre-draft-review.md。详细 source mapping 见 [references/drafting-rules.md](references/drafting-rules.md) §输入前提。

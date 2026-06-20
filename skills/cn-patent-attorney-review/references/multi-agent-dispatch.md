@@ -1,6 +1,6 @@
 # 多 agent 审稿 Dispatch 契约
 
-> 本文档由 `cn-patent-project-drafting` 编排器与 `cn-patent-attorney-review` 共同使用。编排器进入 step 6 multi 模式后按本契约派 6 + 1 个 subagent。
+> 本文档由 `cn-patent-workflow-orchestrator` 编排器与 `cn-patent-attorney-review` 共同使用。编排器进入 step 6 multi 模式后按本契约派 6 + 1 个 subagent。
 
 ## 模式参数语义
 

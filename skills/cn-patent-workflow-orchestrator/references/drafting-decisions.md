@@ -14,7 +14,7 @@
 
 类目元数据 + 命中规则 + 候选项来源 + state 写入字段,集中在:
 
-`cn-patent-project-drafting/assets/decision-categories.json`
+`cn-patent-workflow-orchestrator/assets/decision-categories.json`
 
 类目扩展(如 C8、C9)只改 json,不改本文件。
 

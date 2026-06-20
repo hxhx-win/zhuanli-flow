@@ -2,7 +2,7 @@
 """extract-drafting-context.py — step 4 正式稿起草派单前调用,
 从 patent-iteration-state.json 提取起草所需子树写入 drafting-context.json。
 
-调用位置:cn-patent-project-drafting 编排器在 step 4 派 formal-drafting subagent 前。
+调用位置:cn-patent-workflow-orchestrator 编排器在 step 4 派 formal-drafting subagent 前。
 schema 与字段口径见 docs/superpowers/specs/2026-05-26-formal-drafting-skill-refactor-design.md 附录 C。
 
 输入:
@@ -13,7 +13,7 @@ schema 与字段口径见 docs/superpowers/specs/2026-05-26-formal-drafting-skil
 输出:
   drafting-context.json (~3 KB,UTF-8)
 
-依赖:cn-patent-project-drafting/scripts/lib/state_io.load_state。
+依赖:cn-patent-workflow-orchestrator/scripts/lib/state_io.load_state。
 """
 import argparse
 import json

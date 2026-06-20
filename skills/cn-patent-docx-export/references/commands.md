@@ -5,7 +5,7 @@
 ## 环境检查
 
 ```bash
-python3 ../cn-patent-project-drafting/scripts/patent-env-check.py
+python3 ../cn-patent-workflow-orchestrator/scripts/patent-env-check.py
 ```
 
 ## 附图 manifest 校验

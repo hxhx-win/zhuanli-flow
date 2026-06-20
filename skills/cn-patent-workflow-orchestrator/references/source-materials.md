@@ -115,7 +115,7 @@ python3 scripts/new-iteration-state.py --project-root . --output-path patent/<pa
 只要输入资料中存在 `.pdf`，先检查 PDF 文字提取能力，再进入证据抽取、主线选择或正式稿生成：
 
 ```bash
-python3 .agents/skills/cn-patent-project-drafting/scripts/test-pdf-extraction-readiness.py --path "materials" --project-root .
+python3 .agents/skills/cn-patent-workflow-orchestrator/scripts/test-pdf-extraction-readiness.py --path "materials" --project-root .
 ```
 
 检查顺序不得依赖固定目录：

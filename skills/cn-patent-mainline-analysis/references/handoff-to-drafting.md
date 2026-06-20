@@ -1,8 +1,8 @@
-# 对接 cn-patent-project-drafting 规则
+# 对接 cn-patent-workflow-orchestrator 规则
 
 ## 适用场景
 
-主线分析在编排器步骤 1 中完成后，回写证据矩阵、主线分析报告、保护路径候选摘要、候选发明点用途表和技术特征分层摘要。若资料角色来自前置扫描，应由 `cn-patent-repo-scout` 先生成交接文件，再由 `cn-patent-project-drafting` 初始化状态文件。
+主线分析在编排器步骤 1 中完成后，回写证据矩阵、主线分析报告、保护路径候选摘要、候选发明点用途表和技术特征分层摘要。若资料角色来自前置扫描，应由 `cn-patent-repo-scout` 先生成交接文件，再由 `cn-patent-workflow-orchestrator` 初始化状态文件。
 
 ## 接收扫描结果
 
@@ -39,7 +39,7 @@
 }
 ```
 
-该结构是 repo scout 到 mainline/project drafting 的交接文件结构。编排器初始化状态文件时，才将 `items` 归一化写入状态字段 `source_material_roles.items`，并把 `selected_direction` 写入同名状态字段。
+该结构是 repo scout 到主线分析/工作流编排器的交接文件结构。编排器初始化状态文件时，才将 `items` 归一化写入状态字段 `source_material_roles.items`，并把 `selected_direction` 写入同名状态字段。
 
 状态文件中的 `source_material_roles.items` 结构为：
 

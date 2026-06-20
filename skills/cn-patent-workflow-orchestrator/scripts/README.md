@@ -1,4 +1,4 @@
-# cn-patent-project-drafting / scripts
+# cn-patent-workflow-orchestrator / scripts
 
 编排器使用的脚本索引。所有脚本由编排器在固定位置调用，不应由用户直接运行（除调试外）。
 

@@ -11,7 +11,7 @@
     { "name": "cn-patent-formal-drafting", "role": "core" },
     { "name": "cn-patent-attorney-review", "role": "core" },
     { "name": "cn-patent-docx-export", "role": "core" },
-    { "name": "cn-patent-project-drafting", "role": "core" },
+    { "name": "cn-patent-workflow-orchestrator", "role": "core" },
     { "name": "seaborn", "role": "vendored" },
     { "name": "scientific-visualization", "role": "vendored" },
     { "name": "scientific-schematics", "role": "vendored" },

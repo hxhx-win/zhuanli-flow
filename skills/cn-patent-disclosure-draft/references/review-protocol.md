@@ -157,4 +157,4 @@ subagent 在输出 verdict 前必须自问一遍：
 
 ### 影响
 
-`needs_supplement` 不触发硬阻断,仅在 Gate A 段入口由编排器输出 warning + 候选补料项。详细见 `cn-patent-project-drafting/references/orchestration-philosophy.md § Gate 哲学` 与 `scripts/lib/preconditions.py` 中 `gate-a.drafting-decisions` enter 条件。
+`needs_supplement` 不触发硬阻断,仅在 Gate A 段入口由编排器输出 warning + 候选补料项。详细见 `cn-patent-workflow-orchestrator/references/orchestration-philosophy.md § Gate 哲学` 与 `scripts/lib/preconditions.py` 中 `gate-a.drafting-decisions` enter 条件。
