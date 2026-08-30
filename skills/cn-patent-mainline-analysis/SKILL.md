@@ -11,7 +11,7 @@ description: 当用户已有明确技术方向、选定模块、扫描确认方�
 
 - 用户只有项目目录，想“看看有什么能申专利 / 扫描项目 / 推荐方向” → 使用 `cn-patent-repo-scout`。
 - 用户已经给出技术方向、选定模块、扫描结果或核心资料清单 → 使用本 skill。
-- 用户要完整起草、检索、审稿和导出流程 → 使用 `cn-patent-workflow-orchestrator`。
+- 用户要完整起草、检索、审稿和导出流程 → 使用 `cn-patent-domain-runtime`。
 
 编排模式判断：`patent/<patent-slug>/state/patent-iteration-state.json` 存在 → 编排模式（额外回写状态字段）；否则 → 独立模式。
 

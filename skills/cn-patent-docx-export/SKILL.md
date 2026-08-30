@@ -9,7 +9,7 @@ description: 当用户已有中文发明专利 Markdown 正式稿（通常由 `c
 
 ## 使用场景
 
-- 正式稿已通过 `cn-patent-workflow-orchestrator` 质量检查，需要输出 Word 文档
+- 正式稿已通过 `cn-patent-domain-runtime` 质量检查，需要输出 Word 文档
 - 需要去掉 Markdown 痕迹（代码围栏、标题标记）转为正式排版
 - 需要将 LaTeX 公式转为 Word 公式对象（m:oMath）
 - 需要按起草阶段交付的 `figure-generation-plan.md` / `figure-manifest.json` 准备附图资产并嵌入 DOCX
@@ -19,7 +19,7 @@ description: 当用户已有中文发明专利 Markdown 正式稿（通常由 `c
 
 ## 不适用场景
 
-- 草稿尚未完成起草流程 → 使用 `cn-patent-workflow-orchestrator`
+- 草稿尚未完成起草流程 → 使用 `cn-patent-domain-runtime`
 - 需要修改技术方案、权利要求或发明点 → 退回起草 skill
 - 需要直接生成完整电子申请包或请求书 → 本 skill 输出单文件预提交稿和可选分片稿，不负责电子申请系统填报
 
@@ -27,7 +27,7 @@ description: 当用户已有中文发明专利 Markdown 正式稿（通常由 `c
 
 1. **确认输入**：Markdown 正式稿路径和输出 `.docx` 路径
 2. **检查交接条件**：质量检查报告通过 + Gate C 确认，或用户带风险授权；不满足即停止
-3. **环境检查**：运行 `patent-env-check.py`（位于 `cn-patent-workflow-orchestrator/scripts/`），确认 pandoc/python-docx 可用；阻断项必须先解决
+3. **环境检查**：运行 `patent-env-check.py`（位于 `cn-patent-domain-runtime/scripts/`），确认 pandoc/python-docx 可用；阻断项必须先解决
 4. **公式源校验**：检查起草报告中 LaTeX 公式源结论；独立公式必须为 `latex` 代码块，段内变量必须为 `\(...\)` 或 `$...$`；有硬错误则停止导出
 5. **导出前附图资产准备**（可选）：若正式稿需要附图，读取 [references/专利附图生成后端.md](references/专利附图生成后端.md)，主 agent 按 `figure-manifest.json` 的 `primarySkill` / `preferredBackend` 派只读子 agent 生成或复制图片资产。子 agent 不得修改正式稿正文，不得重新发明附图内容。主 agent 汇总结果并确认每个必需条目的 `imagePath` 已存在；缺失则停止，除非用户明确授权缺图或无图导出。
 6. **DOCX 导出**：执行 `export-patent-draft-docx.py`；有附图时传入已校验且 `imagePath` 均已就绪的 `--figure-manifest` 参数；需要分片稿时传入 `--split-output-dir`
@@ -70,4 +70,4 @@ verdict 为 PASS 时导出完成；WARN 列出待人工确认项；FAIL 必须�
 
 ## 脚本与命令
 
-详见 [references/commands.md](references/commands.md)。跨平台工具映射见 `cn-patent-workflow-orchestrator` 的 `references/agent-tool-mapping.md`。
+详见 [references/commands.md](references/commands.md)。跨平台工具映射见 `cn-patent-domain-runtime` 的 `references/agent-tool-mapping.md`。

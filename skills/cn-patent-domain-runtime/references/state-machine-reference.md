@@ -2,17 +2,18 @@
 
 > Windows 原生环境：命令中的 `python3` 请用 `python` 或 `py` 代替。
 
-状态机已下沉到 `scripts/lib/` + `scripts/validate-stage.py` + `scripts/get-next-step.py`。本文档**不维护字段表**，只指引怎么查。
+状态机已下沉到 `scripts/lib/`，由 `scripts/domain-runtime.py` 统一暴露。旧 `validate-stage.py` / `get-next-step.py` 继续兼容，本文档**不维护字段表**，只指引怎么查。
 
 ## 调用速查
 
 | 我想做的 | 调什么 |
 |---|---|
-| 看现在该做什么 | `python3 scripts/get-next-step.py --state-path patent/<slug>/state/patent-iteration-state.json` |
-| 看 stage X 前置/出口条件是否满足 | `python3 scripts/validate-stage.py --state-path X --stage S --mode enter\|exit` |
-| 拿 Gate A 通过条件清单 | `validate-stage --stage gate-a.confirmation --mode exit` |
-| 拿 Gate B 通过条件清单 | `validate-stage --stage gate-b --mode exit` |
-| 拿 Gate C 通过条件清单 | `validate-stage --stage gate-c --mode exit` |
+| 看现在该做什么 | `python3 scripts/domain-runtime.py status --state-path patent/<slug>/state/patent-iteration-state.json` |
+| 看 stage X 前置/出口条件是否满足 | `python3 scripts/domain-runtime.py validate --state-path X --stage S --mode enter\|exit` |
+| 原子推进 stage | `python3 scripts/domain-runtime.py transition --state-path X --from-stage S --to-stage T` |
+| 拿 Gate A 通过条件清单 | `domain-runtime.py validate --stage gate-a.confirmation --mode exit` |
+| 拿 Gate B 通过条件清单 | `domain-runtime.py validate --stage gate-b --mode exit` |
+| 拿 Gate C 通过条件清单 | `domain-runtime.py validate --stage gate-c --mode exit` |
 | 看 handoff 当前位置 | 读 `state.handoff.status` + （若 picked_up）调 `lib.handoff.picked_up_substage(state)` |
 | 旧 state 升级到新字段 | `python3 scripts/new-iteration-state.py --migrate-from <old.json> --output-path <new.json> --project-root .` |
 
@@ -40,7 +41,7 @@ not_initiated ─→ packaged ─→ picked_up ──┐
 | 2 | `evidence/prior-art-search-report.md` |
 | 3 | `reviews/pre-draft-review.md` + `disclosure/disclosure-draft.md` |
 | 4 | 由 `state.current_draft_path` / `state.figure_manifest_path` 字段维护 |
-| 6 | `reviews/attorney-review.md`（+ multi 模式下 7 份方向子审查） |
+| 6 | `reviews/attorney-review.md`（+ multi 模式下 6 份方向子审查和 1 份综合审查） |
 | 8 | `reviews/user-feedback.md` |
 | 9 | `quality/`（质量检查报告目录） |
 
@@ -56,8 +57,8 @@ handoff packaged 时 `handoff/handoff-package.md` 真产物；picked_up 时可�
 当 `get-next-step.py` 返回 `next_action: step-3.awaiting_gate_a_passed` 时，编排器**必须**先读 `state.step_3.inventor_review.exit_status` 字段判分支：
 
 - `exit_status == "approved"` 或 `"accepted_with_dissent"` → 正向推进，等 `gate_a.status` 写入 passed
-- `exit_status == "rolled_back_step_1"` → 执行 reset：清 `state.step_2.*` / `state.step_3.pre_draft_review.*` / `state.step_3.disclosure_draft.*` / `state.step_3.post_disclosure_decision.*`，`current_stage = "step-1"`
-- `exit_status == "rolled_back_step_2"` → 执行 reset：清 `state.step_3.pre_draft_review.*` / `state.step_3.disclosure_draft.*` / `state.step_3.post_disclosure_decision.*`，`current_stage = "step-2"`（inventor_review 历史保留供回溯）
+- `exit_status == "rolled_back_step_1"` → 专业 Skill 执行 reset：清 `state.step_2.*` / `state.step_3.pre_draft_review.*` / `state.step_3.disclosure_draft.*` / `state.step_3.post_disclosure_decision.*`，再由 Runtime transition 回 `step-1`
+- `exit_status == "rolled_back_step_2"` → 专业 Skill 执行 reset：清 `state.step_3.pre_draft_review.*` / `state.step_3.disclosure_draft.*` / `state.step_3.post_disclosure_decision.*`，再由 Runtime transition 回 `step-2`（inventor_review 历史保留供回溯）
 
 完整流程见 `cn-patent-disclosure-review/references/protocols.md` 「rollback 处理」段。
 
@@ -69,12 +70,12 @@ handoff packaged 时 `handoff/handoff-package.md` 真产物；picked_up 时可�
 - `review_feedback.revision_review_status` / `unresolved_items` / `rollback_reason`（按需）
 - `history.attorney_review_rounds`（每轮追加）
 
-推荐 `current_stage` 流转：
+`current_stage` 的审稿主链由 Runtime 按实际 stage id 流转：
 
 ```
-attorney-review → gate-b-pending → feedback-revision → feedback-revision-review → ready-for-gate-c
-                                                     │
-                                                     └─（用户否决）→ attorney-review（新一轮）
+step-6 → gate-b → step-8 → gate-c
+                     │
+                     └─（用户否决）→ step-6（新一轮）
 ```
 
 字段断言的真相源是 `lib/preconditions.py`（`step-6` / `gate-b` / `step-8` / `gate-c` 的 enter/exit 条件）。prose 不重复维护。

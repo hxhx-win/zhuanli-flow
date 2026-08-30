@@ -99,5 +99,5 @@ description: 当用户已有一份中文发明专利稿（Markdown 或文本）�
 - 审查清单：[references/review-checklists.md](references/review-checklists.md)
 - B 风格语言硬规则：[../cn-patent-formal-drafting/references/language-style-rules.md](../cn-patent-formal-drafting/references/language-style-rules.md)
 - B 风格差例、好例与重写示范：[../cn-patent-formal-drafting/references/language-style-examples.md](../cn-patent-formal-drafting/references/language-style-examples.md)
-- 迭代与回退规则：审稿前风险 / Gate B 硬门禁 / 修订复核见 `../cn-patent-workflow-orchestrator/references/orchestration-philosophy.md § 审稿前风险与 Gate B/修订复核哲学`；状态字段与阶段流转见 `../cn-patent-workflow-orchestrator/references/state-machine-reference.md § 审稿/修订迭代状态流`
+- 迭代与回退规则：审稿前风险 / Gate B 硬门禁 / 修订复核见 `../cn-patent-domain-runtime/references/orchestration-philosophy.md § 审稿前风险与 Gate B/修订复核哲学`；状态字段与阶段流转见 `../cn-patent-domain-runtime/references/state-machine-reference.md § 审稿/修订迭代状态流`
 - 可选关联 skill：`cn-patent-formal-drafting`（修订后可能需要重新起草部分内容）

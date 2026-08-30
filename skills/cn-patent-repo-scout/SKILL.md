@@ -13,7 +13,7 @@ description: 当用户只提供项目目录、代码仓库或技术资料，并�
 - 扫描产物是项目级缓存，可被多个专利方向复用。
 - Top-N 所有方向都要先落盘；完成方向记录后必须停住，让用户选择下一步。
 - 若用户已明确技术方向、保护客体或选定模块，改用 `cn-patent-mainline-analysis` 设计保护路径。
-- 若用户明确要完整起草专利或继续既有状态文件，改用 `cn-patent-workflow-orchestrator`。
+- 若用户明确要完整起草专利或继续既有状态文件，改用 `cn-patent-domain-runtime`。
 
 ## 工作流
 
@@ -92,14 +92,14 @@ description: 当用户只提供项目目录、代码仓库或技术资料，并�
 
 S6 必须通过 `AskUserQuestion` 控件呈现两个选项，禁止只用纯文本列出：
 
-- 进入 `cn-patent-workflow-orchestrator`：启动完整起草编排器（包含主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿、DOCX 导出），并用对应方向的 `patent/repo-scout/directions/<direction-slug>/source-material-roles.json` 初始化资料角色。
+- 进入 `cn-patent-domain-runtime`：启动完整起草编排器（包含主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿、DOCX 导出），并用对应方向的 `patent/repo-scout/directions/<direction-slug>/source-material-roles.json` 初始化资料角色。
 - 暂停：只保留扫描报告和各方向记录，不创建编排状态文件。
 
 进入编排器前，必须先得到用户明确选择的 `<direction-slug>`；只有用户在 S6 选择该方向后，`selected_direction` 才可标记为 `repo-scout-confirmed`。不得因为已生成方向记录就自动创建 `patent/<patent-slug>/state/patent-iteration-state.json`。
 
-用户在 `AskUserQuestion` 中选择「进入编排器」后，本 skill **不得**直接调用 `cn-patent-workflow-orchestrator`。必须先输出以下提示并停住，等用户手动 `/compact` 后重新触发编排器：
+用户在 `AskUserQuestion` 中选择「进入编排器」后，本 skill **不得**直接调用 `cn-patent-domain-runtime`。必须先输出以下提示并停住，等用户手动 `/compact` 后重新触发编排器：
 
-> 已选择进入完整起草编排器。当前会话上下文已较重，建议先执行 `/compact` 压缩上下文，然后重新调用 `cn-patent-workflow-orchestrator` 继续完整起草。编排器会从 `patent/repo-scout/directions/<direction-slug>/source-material-roles.json` 读取方向和资料，不依赖扫描过程中的对话上下文，所以压缩不会丢失已确认的选择。
+> 已选择进入完整起草编排器。当前会话上下文已较重，建议先执行 `/compact` 压缩上下文，然后重新调用 `cn-patent-domain-runtime` 继续完整起草。编排器会从 `patent/repo-scout/directions/<direction-slug>/source-material-roles.json` 读取方向和资料，不依赖扫描过程中的对话上下文，所以压缩不会丢失已确认的选择。
 
 ## 常见错误
 
@@ -113,7 +113,7 @@ S6 必须通过 `AskUserQuestion` 控件呈现两个选项，禁止只用纯文�
 - 多个方向共用一个 `source-material-roles.json` → 必须按方向保存，避免覆盖。
 - 让子 agent 写扫描报告或方向记录 → 子 agent 只读返回发现，主 agent 统一落盘。
 - S6 用纯文本列出选项让用户回复 → 必须通过 `AskUserQuestion` 控件呈现「进入编排器 / 暂停」两选。
-- 用户选「进入编排器」后直接调用 `cn-patent-workflow-orchestrator` → 必须先输出 `/compact` 提示并停住，由用户手动压缩上下文后重新触发编排器。
+- 用户选「进入编排器」后直接调用 `cn-patent-domain-runtime` → 必须先输出 `/compact` 提示并停住，由用户手动压缩上下文后重新触发编排器。
 - 自动进入编排器或创建状态文件 → 必须等用户选择下一步。
 - 把代码注释当作技术效果证据 → 优先用实验数据、性能对比和明确实现。
 

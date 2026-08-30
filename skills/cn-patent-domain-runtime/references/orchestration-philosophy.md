@@ -2,7 +2,7 @@
 
 > Windows 原生环境：命令中的 `python3` 请用 `python` 或 `py` 代替。
 
-本文件回答"为什么这样编排"。字段表 / Gate 通过条件 / handoff 子阶段判定 等机械规则全部下沉到 `scripts/lib/` + `scripts/validate-stage.py` + `scripts/get-next-step.py`，本文档不重复。
+本文件回答"为什么这样编排"。字段表 / Gate 通过条件 / handoff 子阶段判定 等机械规则全部下沉到 `scripts/lib/`，并由 `scripts/domain-runtime.py` 统一暴露，本文档不重复。
 
 需要查"现在是否满足某 stage 的前置/出口" → 调脚本。本文档只解释"为什么有这些 stage、Gate、handoff 段"。
 
@@ -13,12 +13,12 @@
 3. 查找 `patent/<patent-slug>/state/patent-iteration-state.json`。
 4. 状态文件不存在时，从 step 0 开始；可将已确认的扫描交接文件复制为 `patent/<patent-slug>/source-material-roles.json`，再交给初始化脚本导入 `source_material_roles`。step 0.3 资料角色确认细则详见 [source-materials.md](source-materials.md)。
 5. 状态文件存在时，只能从状态文件中最近通过的 Gate 或 `current_stage` 对应的合法 stage 继续。
-6. 进入任一 stage 前，必须跑 `scripts/validate-stage.py --stage <S> --mode enter`，result≠ok 即停下来 AskUserQuestion。
+6. 进入任一 stage 前，宿主 Agent 必须跑 `scripts/domain-runtime.py validate --stage <S> --mode enter`，`ok=false` 即停下来补料或 AskUserQuestion。
 7. 每个 stage 的出口动作必须**按顺序**完成：
-   - 跑 `scripts/validate-stage.py --stage <S> --mode exit`，result=blocked 则补派或追问；
-   - **result=ok 后**：编排器主动把 `state.current_stage` 写到下一 stage 名（如 `step-0` 完成写 `step-1`）。**为什么**：`get-next-step.py` 取 `min(declared, derived)` 防越界，`current_stage` 不前移则路由永远返回当前 stage，造成死循环；
+   - 跑 `scripts/domain-runtime.py validate --stage <S> --mode exit`，`ok=false` 则补派或追问；
+   - **exit 通过后**：宿主 Agent 调 `scripts/domain-runtime.py transition --from-stage <S> --to-stage <T>`，由 Runtime 在锁内复核并原子更新 `state.current_stage`；禁止宿主直接改该字段；
    - `step-0` 出口额外把 `env-check.json` 的 `warnings` 数组在对话中 echo 一次（字体、缺工具等下游阶段才会触发的提示，让用户提前知情）；
-   - 再跑 `scripts/get-next-step.py --state-path <path>`，按其输出推进到下一 stage。
+   - 按 Runtime 响应中的 `next_action` / `executor_info` 推进下一 stage。
 
 **为什么先 env-check 再 state-init**：env-check 决定 PDF/Word/LaTeX 工具是否就绪；state-init 必须把这些能力写入 `env_check_path` 字段，否则后续 subagent 拿不到能力矩阵。两者**串行不并行**——能力快照是状态文件的前置事实。
 
@@ -33,11 +33,11 @@
 
 所有产出型阶段（step 1 / step 2 / step 3 评审 / step 3 技术交底书 / step 4 正式稿 / step 6 代理师审稿）必须经由 `Agent(subagent_type=general-purpose)` 派 subagent 执行。**为什么**：
 
-- **上下文隔离**：子 skill SKILL.md + references 总长可达 ~1000 行，主编排器只关心状态机和 Gate 拍板。混在主上下文里读子 skill 资料是上下文污染，导致状态机判断漂移。
-- **产物纪律**：subagent 直接 Write 落盘到用户项目根目录，写到磁盘的内容**不返回**给主编排器。返回的是 ≤600 字摘要 + 路径。
+- **上下文隔离**：子 skill SKILL.md + references 总长可达 ~1000 行，宿主 Agent只关心状态机和 Gate 拍板。混在主上下文里读子 skill 资料是上下文污染，导致状态机判断漂移。
+- **产物纪律**：subagent 直接 Write 落盘到用户项目根目录，写到磁盘的内容**不返回**给宿主 Agent。返回的是 ≤600 字摘要 + 路径。
 - **可追溯性**：派单 prompt 显式列出已确认事实（用户决策、verdict、关键技术口径、上游产物路径），subagent 不得自行猜测。
 
-主编排器只做：状态文件读写、用户交互、脚本调用、Gate 拍板、verdict 分支、风险登记同步。具体派单契约见 [agent-tool-mapping.md](agent-tool-mapping.md)。
+宿主 Agent 只做：专业结果回写、用户交互、脚本调用、Gate 拍板、verdict 分支、风险登记同步；流程控制字段通过 Runtime 迁移接口提交。具体派单契约见 [agent-tool-mapping.md](agent-tool-mapping.md)。
 
 ### 为什么 step 4 起草派单前必跑 `extract-drafting-context.py`
 
@@ -143,8 +143,8 @@ handoff 段三类 user 入口（按 status 分支 AskUserQuestion）：
 
 复核后状态处理：
 
-- 用户明确认可 → `current_stage = ready-for-gate-c`
-- 用户要求局部继续修改 → 保持 `feedback-revision`，进入下一轮
+- 用户明确认可 → 由 Runtime transition 推进到 `gate-c`
+- 用户要求局部继续修改 → 保持 `step-8`，进入下一轮
 - 用户否定关键修改或要求重审 → 当前修订稿**不得**作为交付基础，回退 `attorney-review`，记 `rollback_reason`，重新开 `history.attorney_review_rounds` 轮次
 
 **质量检查通过不能替代用户复核**。这是两个正交维度：质量检查看的是结构与硬规则，用户复核看的是"修对了没"。

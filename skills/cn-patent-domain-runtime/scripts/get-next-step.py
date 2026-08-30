@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """get-next-step.py — 编排器每步完成后调用,计算下一步路由 + 识别 handoff 分支。
 
-调用位置:cn-patent-workflow-orchestrator 编排器每完成一步后,读 state 决定下一步。
+调用位置:cn-patent-domain-runtime 编排器每完成一步后,读 state 决定下一步。
 
 输入:
   --state-path <path>       state 文件路径(必填,绝对或相对路径)
@@ -350,7 +350,7 @@ def validate_prior_step_deliverables(state: dict, state_path: Path, next_step: i
     # step 6 review-mode-selection.md 已废(spec §3.7),mode 选择由 state.step_6.review_mode 校验
     # (旧 legacy skip 逻辑同步删除,改走 state 字段)
 
-    # step 6 multi 模式 7 份方向子文件必齐全(真产物,保留)
+    # step 6 multi 模式 6 份方向子文件 + 1 份综合文件必齐全(真产物,保留)
     s6 = state.get("step_6") or {}
     if s6.get("review_mode") == "multi" and next_step > 6:
         for rel in STEP_DELIVERABLES["step_6_multi"]:

@@ -1,5 +1,11 @@
 # 变更记录
 
+## 2.0.0 - 2026-08-30
+
+- 将 `cn-patent-workflow-orchestrator` 硬重命名为 `cn-patent-domain-runtime`，不保留兼容 Skill 或转发入口。
+- 新增薄 Domain Runtime CLI，统一提供状态查询、阶段校验和受控原子迁移。
+- 调用方必须改用新的 Skill slug 与路径；宿主 Agent 继续负责加载专业 Skill、派发子 Agent 和写入业务结果。
+
 ## 1.6.0 - 2026-06-06
 
 - 建立 `patents-workflow` 本地开发仓库。

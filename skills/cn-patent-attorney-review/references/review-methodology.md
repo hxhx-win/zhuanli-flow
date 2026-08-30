@@ -1,6 +1,6 @@
 # 审稿发现写法
 
-本文件只规定代理师审稿发现如何表达、分级和合并。审稿流程、子 agent 维度、Gate 和状态回写以 `../SKILL.md` 与 `../../cn-patent-workflow-orchestrator/references/orchestration-philosophy.md § 审稿前风险与 Gate B/修订复核哲学` 为准。
+本文件只规定代理师审稿发现如何表达、分级和合并。审稿流程、子 agent 维度、Gate 和状态回写以 `../SKILL.md` 与 `../../cn-patent-domain-runtime/references/orchestration-philosophy.md § 审稿前风险与 Gate B/修订复核哲学` 为准。
 
 ## 单条发现格式
 

@@ -127,7 +127,7 @@ J(\theta)J(\theta)^{\mathrm{T}}
 不得保留 `sum(k=1 to m)`、`sqrt(...)`、`mu(θ)`、`^T`、`||...||`、裸 `Jalloc=...`、`lambda1 sum(...)` 等伪公式写法。导出前运行：
 
 ```bash
-python3 .agents/skills/cn-patent-workflow-orchestrator/scripts/test-latex-formula-readiness.py --draft-path patent/<patent-slug>/drafts/markdown/<draft-name>.md --fail-on-error
+python3 .agents/skills/cn-patent-domain-runtime/scripts/test-latex-formula-readiness.py --draft-path patent/<patent-slug>/drafts/markdown/<draft-name>.md --fail-on-error
 ```
 
 ## 必须完成的动作

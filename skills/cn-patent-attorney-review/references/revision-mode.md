@@ -1,10 +1,10 @@
 # revision Mode 契约
 
-> step 8「用户反馈修订」由 `cn-patent-workflow-orchestrator` 编排器派 revision subagent 执行，subagent 内部调用本 SKILL 的 step 7「按用户反馈修订」流程。归属本 SKILL 而非 `cn-patent-formal-drafting`，理由：本 SKILL.md 步骤 7 本就承载修订职能（详见 SKILL.md 工作流表）。
+> step 8「用户反馈修订」由 `cn-patent-domain-runtime` 编排器派 revision subagent 执行，subagent 内部调用本 SKILL 的 step 7「按用户反馈修订」流程。归属本 SKILL 而非 `cn-patent-formal-drafting`，理由：本 SKILL.md 步骤 7 本就承载修订职能（详见 SKILL.md 工作流表）。
 
 ## subagent 输入契约
 
-编排器派 revision subagent 时按以下分级显式列路径。**默认输入仅 4 个核心**；7 份方向子审查与起草侧 references **不预加载**（subagent 上下文压力管理，见本文档「上下文压力预算」段）。
+编排器派 revision subagent 时按以下分级显式列路径。**默认输入仅 4 个核心**；6 份方向子审查和 1 份综合审查与起草侧 references **不预加载**（subagent 上下文压力管理，见本文档「上下文压力预算」段）。
 
 ### 默认必读（4 个核心）
 
@@ -13,7 +13,7 @@
 | 当前正式稿（最新版 markdown 绝对路径） | 修订基底 |
 | 当前 evidence notes（最新版） | 修订基底 + 支撑矩阵更新 |
 | `reviews/attorney-review.md`（综合审稿） | 修订总目标——已含跨方向同根因合并 + 冲突取整 |
-| `reviews/user-feedback.md` | 用户决策（哪些 review 项接受 / 否定 / 推迟）；结构契约见 `../cn-patent-workflow-orchestrator/assets/user-feedback-decision.template.md`；高 / 中优先级两节内**允许**用 `by_article: { "22.3": [...], "26.3": [...] }` 索引承载法条维度的逐条决策 |
+| `reviews/user-feedback.md` | 用户决策（哪些 review 项接受 / 否定 / 推迟）；结构契约见 `../cn-patent-domain-runtime/assets/user-feedback-decision.template.md`；高 / 中优先级两节内**允许**用 `by_article: { "22.3": [...], "26.3": [...] }` 索引承载法条维度的逐条决策 |
 
 ### 按需 Read（不预加载）
 
@@ -148,7 +148,7 @@ revision subagent 上下文增量预算（按 1 KB 文本 ≈ 250 token 估算�
 
 ## 与编排器边界
 
-- 编排器主 agent 不读 7 份子审查文件，全部由 revision subagent 内部读
+- 编排器主 agent 不读 6 份方向子审查和 1 份综合审查文件，全部由 revision subagent 内部读
 - 修订完成后 subagent 写 state：
   - `step_8.revision_subagent_dispatched = true`
   - `step_8.revision_subagent_dispatched_at = <ISO 时间>`

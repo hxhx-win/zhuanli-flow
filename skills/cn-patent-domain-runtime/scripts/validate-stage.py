@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""validate-stage.py — 主编排器调,显式断言 stage 前置/出口条件。
+"""validate-stage.py — 宿主 Agent调,显式断言 stage 前置/出口条件。
 
 契约见 spec §3.5。
 
@@ -42,7 +42,7 @@ def _suggest(r: dict) -> str:
             m.get("field") or m.get("deliverable") or m.get("unknown_stage") or "?"
             for m in r["missing"][:3]
         )
-        return f"缺失: {items} — 主编排器须 AskUserQuestion 或派 subagent 补"
+        return f"缺失: {items} — 宿主 Agent须 AskUserQuestion 或派 subagent 补"
     if r["blocked"]:
         return "存在硬阻断规则,见 blocked 详情"
     if r["warnings"]:

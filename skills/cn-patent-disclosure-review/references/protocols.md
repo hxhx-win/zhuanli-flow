@@ -102,7 +102,7 @@ Stage 3 解决思路可行性
 
 ### rollback 处理（`rolled_back_step_1` / `rolled_back_step_2`）
 
-主跑 skill 写完 `exit_status` 后退出；由编排器 `cn-patent-workflow-orchestrator` 读 `exit_status` 字段执行 reset：
+主跑 skill 写完 `exit_status` 后退出；由编排器 `cn-patent-domain-runtime` 读 `exit_status` 字段执行 reset：
 
 - `rolled_back_step_1`：清空 `state.step_2.*` / `state.step_3.pre_draft_review.*` / `state.step_3.disclosure_draft.*` / `state.step_3.post_disclosure_decision.*`；保留 `state.step_3.inventor_review` 历史记录供回溯
 - `rolled_back_step_2`：清空 `state.step_3.pre_draft_review.*` / `state.step_3.disclosure_draft.*` / `state.step_3.post_disclosure_decision.*`；保留 inventor_review 历史

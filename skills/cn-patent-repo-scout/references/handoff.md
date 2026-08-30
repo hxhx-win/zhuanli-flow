@@ -6,7 +6,7 @@
 
 扫描 skill 只准备方向和核心资料，不直接进入后续流程。用户在 S6 必须通过 `AskUserQuestion` 控件二选一：
 
-- `cn-patent-workflow-orchestrator`：启动完整起草编排器（覆盖主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿、DOCX 导出）。
+- `cn-patent-domain-runtime`：启动完整起草编排器（覆盖主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿、DOCX 导出）。
 - 暂停：只保存扫描产物，不创建任何状态文件。
 
 ## 交接文件
@@ -94,15 +94,15 @@ Top-N 中所有推荐方向都必须生成独立目录：
 
 ## 进入主线分析
 
-主线分析不再作为 S6 单独的下一步入口。已确认方向下的保护路径设计、特征分层和发明点用途表整理由 `cn-patent-workflow-orchestrator` 编排器内部调度 `cn-patent-mainline-analysis` 完成。用户在 S6 选择「进入完整编排器」后，编排器会读取 `selected_direction` 与 `items`，并以此为输入启动主线分析。本 skill 不直接调用主线分析。
+主线分析不再作为 S6 单独的下一步入口。已确认方向下的保护路径设计、特征分层和发明点用途表整理由 `cn-patent-domain-runtime` 编排器内部调度 `cn-patent-mainline-analysis` 完成。用户在 S6 选择「进入完整编排器」后，编排器会读取 `selected_direction` 与 `items`，并以此为输入启动主线分析。本 skill 不直接调用主线分析。
 
 ## 进入完整编排器
 
-若用户在 S6 选择 `cn-patent-workflow-orchestrator`：
+若用户在 S6 选择 `cn-patent-domain-runtime`：
 
-**重要：选择此选项后，本 skill 不得直接调用 `cn-patent-workflow-orchestrator`。** 必须先输出以下提示并停住，由用户手动 `/compact` 后重新触发编排器：
+**重要：选择此选项后，本 skill 不得直接调用 `cn-patent-domain-runtime`。** 必须先输出以下提示并停住，由用户手动 `/compact` 后重新触发编排器：
 
-> 已选择进入完整起草编排器。当前会话上下文已较重，建议先执行 `/compact` 压缩上下文，然后重新调用 `cn-patent-workflow-orchestrator` 继续完整起草。编排器会从 `patent/repo-scout/directions/<direction-slug>/source-material-roles.json` 读取方向和资料，不依赖扫描过程中的对话上下文，所以压缩不会丢失已确认的选择。
+> 已选择进入完整起草编排器。当前会话上下文已较重，建议先执行 `/compact` 压缩上下文，然后重新调用 `cn-patent-domain-runtime` 继续完整起草。编排器会从 `patent/repo-scout/directions/<direction-slug>/source-material-roles.json` 读取方向和资料，不依赖扫描过程中的对话上下文，所以压缩不会丢失已确认的选择。
 
 用户重新触发编排器后，编排器按以下顺序执行：
 
@@ -121,4 +121,4 @@ python3 scripts/new-iteration-state.py --project-root . --output-path patent/<pa
 - 用户在 S6 选择「暂停」。
 - 所有推荐方向置信度均为 low，且用户未确认继续。
 - 用户尚未明确选择下一步。
-- 用户已在 S6 选择「进入编排器」但尚未 `/compact` 并重新触发 `cn-patent-workflow-orchestrator`。本 skill 不得绕过 compact 提示直接初始化状态文件。
+- 用户已在 S6 选择「进入编排器」但尚未 `/compact` 并重新触发 `cn-patent-domain-runtime`。本 skill 不得绕过 compact 提示直接初始化状态文件。

@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import stat
 from pathlib import Path
 
@@ -10,6 +11,9 @@ SKILLS_ROOT = REPO_ROOT / "skills"
 DEFAULT_LIVE_ROOTS = {
     "codex": Path.home() / ".codex" / "skills",
     "claude": Path.home() / ".claude" / "skills",
+}
+RENAMED_SKILLS = {
+    "cn-patent-workflow-orchestrator": "cn-patent-domain-runtime",
 }
 
 
@@ -34,6 +38,11 @@ def main() -> int:
     live_root = Path(args.live_root or DEFAULT_LIVE_ROOTS[args.agent]).expanduser()
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     errors: list[str] = []
+
+    for old_name, new_name in RENAMED_SKILLS.items():
+        old_live_path = live_root / old_name
+        if os.path.lexists(old_live_path):
+            errors.append(f"已重命名的旧 live skill 仍存在: {old_live_path}；请迁移到 {new_name}")
 
     for skill in manifest.get("skills", []):
         skill_name = str(skill.get("name", ""))

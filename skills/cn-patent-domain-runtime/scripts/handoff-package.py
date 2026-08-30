@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """handoff-package.py — 研发交付专利部门时调用,生成 handoff-package.md + 切 state.handoff.status = packaged。
 
-调用位置:cn-patent-workflow-orchestrator 编排器在 step 3 用户分流决策选"交付专利部"时。
+调用位置:cn-patent-domain-runtime 编排器在 step 3 用户分流决策选"交付专利部"时。
 
 输入:
   --slug <slug>             方向标识(必填)
@@ -65,7 +65,7 @@ TEMPLATE = """# 研发→专利部门交接包
 
 ## 待 Gate A 段决策类目
 
-由编排器在专利部接手后通过 AskUserQuestion 逐题问。候选项动态从上游产物抽取(见 cn-patent-workflow-orchestrator/assets/decision-categories.json)。
+由编排器在专利部接手后通过 AskUserQuestion 逐题问。候选项动态从上游产物抽取(见 cn-patent-domain-runtime/assets/decision-categories.json)。
 
 ## 沟通模板(专利部门可填写)
 

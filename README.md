@@ -4,7 +4,7 @@
 
 ## 当前版本
 
-`1.6.0`
+`2.0.0`
 
 ## 工作方式
 
@@ -58,7 +58,7 @@ python scripts/check-live-links.py --live-root "<path-to-skills>"
 - `cn-patent-formal-drafting`
 - `cn-patent-attorney-review`
 - `cn-patent-docx-export`
-- `cn-patent-workflow-orchestrator`
+- `cn-patent-domain-runtime`
 
 支撑型 vendored skill：
 

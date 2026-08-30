@@ -13,7 +13,7 @@ description: 当用户已完成 cn-patent-mainline-analysis 与 cn-patent-prior-
 - 不重新挑主线（用 `cn-patent-mainline-analysis`）
 - 不重新检索（用 `cn-patent-prior-art-search`）
 - 不起草权要（评审通过后由 `cn-patent-formal-drafting` 起草）
-- 不做起草前决策与 Gate A 确认（由编排器自执行，见 `cn-patent-workflow-orchestrator/references/drafting-decisions.md`）
+- 不做起草前决策与 Gate A 确认（由编排器自执行，见 `cn-patent-domain-runtime/references/drafting-decisions.md`）
 
 ## 子阶段工作流
 
@@ -22,7 +22,7 @@ description: 当用户已完成 cn-patent-mainline-analysis 与 cn-patent-prior-
 | review | 资深专利代理师 / 起草前评审者：以稳妥起草为目标，对发明点的合规性、因果链、区别特征反例、可面试度做闸前体检，宁可标 `revise-required` 也不放含糊点过闸 | 派 subagent 隔离执行：subagent 加载 `references/review-protocol.md` + 读 4 份输入 + 三道复审 + 判定 `decision_readiness` 软字段 + 生成 `proposal_summary_oneliner`（≤60 字）+ Write `pre-draft-review.md` + 回 ≤200 字 summary | `patent/<patent-slug>/reviews/pre-draft-review.md` | `step_3.pre_draft_review.*`（含 verdict + decision_readiness + chain_check + proposal_summary_oneliner） |
 | disclosure-generation | 研发人员 + 专利工程师双视角：以研发口径把技术方案讲清楚（机制 / 数据流 / 实验），同时以专利工程师口径锚定权利要求范围与从权层次，不替代代理师抠条款 | 派 subagent 加载 `references/drafting-discipline.md` + `assets/disclosure-template.md` + 读 4 份输入 + 写技术版交底书主体八节；"题目"/"保护客体"/"权利要求范围"字段允许占位"(待用户确认)"（由编排器在起草前决策阶段填入 state） | `patent/<patent-slug>/disclosure/disclosure-draft.md` | `step_3.disclosure_draft.*` |
 
-起草前决策（原 3b）与 Gate A 确认由编排器执行，见 `cn-patent-workflow-orchestrator/references/drafting-decisions.md`。用户分流决策（原 3d）在 step 3 末尾由编排器 AskUserQuestion 五选执行。
+起草前决策（原 3b）与 Gate A 确认由编排器执行，见 `cn-patent-domain-runtime/references/drafting-decisions.md`。用户分流决策（原 3d）在 step 3 末尾由编排器 AskUserQuestion 五选执行。
 
 ## 出口分支（disclosure-generation 完成后）
 
@@ -78,7 +78,7 @@ patent_root: <patent root 绝对路径>
 输出产物绝对路径: <绝对路径>
 ```
 
-主编排器侧 `cn-patent-workflow-orchestrator/references/agent-tool-mapping.md` 中 disclosure-draft 派单条目须引用本 SKILL.md 的入口分路段与本契约段，避免两边漂移。
+主编排器侧 `cn-patent-domain-runtime/references/agent-tool-mapping.md` 中 disclosure-draft 派单条目须引用本 SKILL.md 的入口分路段与本契约段，避免两边漂移。
 
 ## 产物路径
 
@@ -97,7 +97,7 @@ patent_root: <patent root 绝对路径>
 - 评审协议（评审 subagent 必读）：[references/review-protocol.md](references/review-protocol.md)
 - 起草纪律（交底书 subagent 必读）：[references/drafting-discipline.md](references/drafting-discipline.md)
 - 交底书模板：[assets/disclosure-template.md](assets/disclosure-template.md)
-- 类目配置：已迁到 `cn-patent-workflow-orchestrator/assets/decision-categories.json`，本 skill 不再持有
+- 类目配置：已迁到 `cn-patent-domain-runtime/assets/decision-categories.json`，本 skill 不再持有
 - 证据可信度信号 schema：`../cn-patent-mainline-analysis/references/evidence-quality-signals-schema.md`
 - DF 反例自检规则：`../cn-patent-prior-art-search/references/creativity-screening.md`（末尾段）
 

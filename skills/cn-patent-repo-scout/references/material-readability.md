@@ -2,7 +2,7 @@
 
 > **被两个 skill 共享**：
 > - `cn-patent-repo-scout`：S2 资料可读性预检使用本表（人工对照）
-> - `cn-patent-workflow-orchestrator`：步骤 0.1 的 `patent-env-check.py --source-root` 使用本表的格式判定与工具命令（脚本内 `EXT_READABILITY` / `EXT_TOOLS` / `INSTALL_COMMANDS` 与本表保持同步，本表为权威来源）。修改时两边一起改。
+> - `cn-patent-domain-runtime`：步骤 0.1 的 `patent-env-check.py --source-root` 使用本表的格式判定与工具命令（脚本内 `EXT_READABILITY` / `EXT_TOOLS` / `INSTALL_COMMANDS` 与本表保持同步，本表为权威来源）。修改时两边一起改。
 
 S2 资料可读性预检使用本表。涵盖（1）按格式判断"当前环境能否完整读取"的规则，（2）按操作系统给出可执行的安装命令。
 

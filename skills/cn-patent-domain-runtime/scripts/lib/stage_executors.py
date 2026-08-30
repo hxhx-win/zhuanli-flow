@@ -26,8 +26,8 @@ from pathlib import Path
 from typing import Any, Dict
 
 
-ORCHESTRATOR_SKILL_ROOT = Path(__file__).resolve().parents[2]
-SKILLS_ROOT = ORCHESTRATOR_SKILL_ROOT.parent
+RUNTIME_SKILL_ROOT = Path(__file__).resolve().parents[2]
+SKILLS_ROOT = RUNTIME_SKILL_ROOT.parent
 
 
 def _skill_path(skill_name: str, *parts: str) -> str:
@@ -107,8 +107,8 @@ STAGE_EXECUTORS: Dict[str, Dict[str, Any]] = {
         "executor": "orchestrator",
         "type": "main_agent_ask_user",
         "must_load": [
-            _skill_path("cn-patent-workflow-orchestrator", "assets", "decision-categories.json"),
-            _skill_path("cn-patent-workflow-orchestrator", "references", "drafting-decisions.md"),
+            _skill_path("cn-patent-domain-runtime", "assets", "decision-categories.json"),
+            _skill_path("cn-patent-domain-runtime", "references", "drafting-decisions.md"),
         ],
         "do_not_merge_user_questions": True,
     },

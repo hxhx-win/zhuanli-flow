@@ -1,8 +1,8 @@
-# 对接 cn-patent-workflow-orchestrator 规则
+# 对接 cn-patent-domain-runtime 规则
 
 ## 适用场景
 
-主线分析在编排器步骤 1 中完成后，回写证据矩阵、主线分析报告、保护路径候选摘要、候选发明点用途表和技术特征分层摘要。若资料角色来自前置扫描，应由 `cn-patent-repo-scout` 先生成交接文件，再由 `cn-patent-workflow-orchestrator` 初始化状态文件。
+主线分析在编排器步骤 1 中完成后，回写证据矩阵、主线分析报告、保护路径候选摘要、候选发明点用途表和技术特征分层摘要。若资料角色来自前置扫描，应由 `cn-patent-repo-scout` 先生成交接文件，再由 `cn-patent-domain-runtime` 初始化状态文件。
 
 ## 接收扫描结果
 

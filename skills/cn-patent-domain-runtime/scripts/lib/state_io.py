@@ -1,5 +1,7 @@
-"""state_io.py — state 文件读写与 patent_root 推算。无副作用。"""
+"""state_io.py — state 文件读写与 patent_root 推算。"""
 import json
+import os
+import tempfile
 from pathlib import Path
 
 
@@ -14,8 +16,24 @@ def patent_root_from_state_path(state_path) -> Path:
 
 
 def write_state(state_path, state: dict) -> None:
-    """写 state JSON,保留缩进与中文。"""
-    Path(state_path).write_text(
-        json.dumps(state, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    """原子写入 state JSON，保留缩进与中文。"""
+    destination = Path(state_path)
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=destination.parent,
+            prefix=f".{destination.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+            json.dump(state, temporary, ensure_ascii=False, indent=2)
+            temporary.flush()
+            os.fsync(temporary.fileno())
+        os.replace(temporary_path, destination)
+        temporary_path = None
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)

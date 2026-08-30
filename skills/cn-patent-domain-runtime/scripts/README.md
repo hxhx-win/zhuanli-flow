@@ -1,9 +1,10 @@
-# cn-patent-workflow-orchestrator / scripts
+# cn-patent-domain-runtime / scripts
 
-编排器使用的脚本索引。所有脚本由编排器在固定位置调用，不应由用户直接运行（除调试外）。
+Domain Runtime 与宿主 Agent 使用的脚本索引。除统一 Runtime CLI 外，其余脚本由宿主在固定位置调用，不应由用户直接运行（除调试外）。
 
 | 脚本 | 调用位置 | 作用 |
 |---|---|---|
+| `domain-runtime.py` | 每次查询、校验和阶段迁移 | 统一提供 `status` / `validate` / `transition`；输出固定 JSON 信封 |
 | `patent-env-check.py` | step 0 环境预检 | 检查可读取的资料格式 + 工具就绪度 |
 | `new-iteration-state.py` | step 0 状态初始化 | 创建/重置 patent-iteration-state.json；旧 state 升级走 `--migrate-from <old.json>`，自动补新字段（`pre_review_risk_acknowledged*` / `step_6.review_mode*`），不种回 5 处 legacy 伪产物路径 |
 | `validate-stage.py` | 进入/退出每个 stage 时 | 14 类 A 实质阶段 + 9 类 B 等待状态全覆盖；调用 `lib.preconditions.check_stage`；输出 JSON `{result, passed[], missing[], blocked[], warnings[], next_suggested_action}`；退出码 0 = 校验完成，非零 = 工具错误 |
@@ -15,6 +16,8 @@
 | `extract-reference-text.py` | 按需 | 取 reference 文档片段（辅助 agent） |
 | `test-latex-formula-readiness.py` | step 0 环境预检 | LaTeX 渲染能力检查 |
 | `test-pdf-extraction-readiness.py` | step 0 环境预检 | PDF 提取能力检查 |
+
+`domain-runtime.py` 的三个子命令统一输出固定 JSON 信封。`transition --changes-json` 接受嵌套对象或点号路径对象；传 `-` 时从 stdin 读取。退出码 `0` 表示成功，`2` 表示校验/迁移阻断，`1` 表示参数、文件、JSON 或锁等工具错误。
 
 ## 共享库 `scripts/lib/`
 

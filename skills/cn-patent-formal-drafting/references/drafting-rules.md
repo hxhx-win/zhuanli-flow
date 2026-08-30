@@ -12,7 +12,7 @@
 
 缺少主线、区别特征或核心证据时，不得输出“看起来完整”的正式稿，应回到主线分析、检索或补证流程。
 
-编排模式下，正式稿输入文件消费规则（**起草 subagent 仅读 disclosure-draft.md + pre-draft-review.md + drafting-context.json，不读 mainline-analysis / prior-art-search-report / evidence-matrix 三份上游产物，也不读 state.json 全量**；上游产物的关键内容由 disclosure 第 2/3/4/5/6/7 节和 pre-draft 的 risk_inputs / oneliner 段在上游 skill 阶段已完整吸收；state.json 中起草所需子树由编排器在 step 4 派单前用 `cn-patent-workflow-orchestrator/scripts/extract-drafting-context.py` 预提取为 `drafting-context.json`）：
+编排模式下，正式稿输入文件消费规则（**起草 subagent 仅读 disclosure-draft.md + pre-draft-review.md + drafting-context.json，不读 mainline-analysis / prior-art-search-report / evidence-matrix 三份上游产物，也不读 state.json 全量**；上游产物的关键内容由 disclosure 第 2/3/4/5/6/7 节和 pre-draft 的 risk_inputs / oneliner 段在上游 skill 阶段已完整吸收；state.json 中起草所需子树由编排器在 step 4 派单前用 `cn-patent-domain-runtime/scripts/extract-drafting-context.py` 预提取为 `drafting-context.json`）：
 
 - 背景技术 / 最接近现有技术：从 `disclosure-draft.md` 第 2 节（背景技术与现有技术）+ 第 7 节（与现有技术对比）取。
 - 独立权利要求骨架：从 Gate A 确认的 `drafting-context.gate_a.selected_mainline` + `drafting-context.gate_a.claimable_invention_points` + `drafting-context.gate_a.distinguishing_features` 取（drafting-context.json 子字段）。
