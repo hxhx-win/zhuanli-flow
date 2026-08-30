@@ -2,20 +2,20 @@
 
 ## 仓库定位
 
-`patents-workflow` 是开发仓库，也是 15 个声明 skill 的真实文件位置。Codex 和 Claude Code 实际扫描的 live skill 目录会通过本机 live link 指向当前 clone 的 `skills/<skill-name>`。
+`patents-workflow` 源码仓库是 15 个声明 Skill 的真实文件位置。live link 仅用于贡献者开发；普通用户应使用 GitHub Release 完整包和 `scripts/install-skills.py`。
 
 Codex 首次 clone 后运行：
 
 ```bash
-python scripts/link-live-skills.py --agent codex --apply
-python scripts/check-live-links.py --agent codex
+python scripts/dev/link-live-skills.py --agent codex --apply
+python scripts/dev/check-live-links.py --agent codex
 ```
 
 Claude Code 首次 clone 后运行：
 
 ```bash
-python scripts/link-live-skills.py --agent claude --apply
-python scripts/check-live-links.py --agent claude
+python scripts/dev/link-live-skills.py --agent claude --apply
+python scripts/dev/check-live-links.py --agent claude
 ```
 
 默认 live root：
@@ -44,8 +44,10 @@ git diff
 ## 本地检查
 
 ```bash
-python scripts/check-release.py
-python scripts/check-live-links.py
+python -B scripts/check-release.py
+python -B -m unittest discover -s tests -v
+python -B scripts/build-release.py
+python -B scripts/dev/check-live-links.py --agent codex
 ```
 
 ## 版本迭代

@@ -1,5 +1,12 @@
 # 变更记录
 
+## 2.1.0 - 2026-08-31
+
+- 采用 MIT License，并补充 vendored Skill 的来源、目录摘要和第三方许可证。
+- 新增完整套件安装、校验和安全卸载 CLI。
+- 将 live-link 管理移入开发者工具目录，不再作为普通用户安装或发布门禁。
+- 新增确定性完整 Release ZIP、SHA-256 和 tag 自动发布工作流。
+
 ## 2.0.0 - 2026-08-30
 
 - 将 `cn-patent-workflow-orchestrator` 硬重命名为 `cn-patent-domain-runtime`，不保留兼容 Skill 或转发入口。

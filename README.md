@@ -1,54 +1,76 @@
 # patents-workflow
 
-`patents-workflow` 是中文专利工作流 skill 套件开发仓库。仓库用于协作开发、发布前检查和版本管理。
+`patents-workflow` 是面向中文发明专利工作的 Agent Skill 套件，包含确定性领域 Runtime、主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿和 DOCX 导出能力。
 
-## 当前版本
+当前版本：`2.1.0`
 
-`2.0.0`
+## 获取发行包
 
-## 工作方式
-
-本仓库使用本机 live link 管理 agent 可扫描的 skill。当前支持 Codex 和 Claude Code：
+普通用户请从 [GitHub Releases](https://github.com/hxhx-win/patents-workflow/releases) 下载：
 
 ```text
-~/.codex/skills/<skill-name>
-  -> <repo>/skills/<skill-name>
-
-~/.claude/skills/<skill-name>
-  -> <repo>/skills/<skill-name>
+patents-workflow-v2.1.0-full.zip
+patents-workflow-v2.1.0-full.zip.sha256
 ```
 
-你可以继续在对应 agent 的 live skill 目录下直接修改和试用 skill；实际文件位于当前 clone 的 `skills/` 目录，Git 会直接看到变更。
+命名的完整发行包包含 9 个核心专利 Skill、6 个绘图支撑 Skill、安装器和全部许可证材料。GitHub 自动生成的 Source code 压缩包是贡献者源码，不是面向用户整理的安装包。
 
-Codex 使用者首次 clone 后，在仓库根目录运行：
+下载后先核对 SHA-256，再解压并进入 `patents-workflow-2.1.0/` 目录。
+
+## 安装
+
+安装器默认面向 Codex 的 `~/.codex/skills`。不加 `--apply` 时只预览：
 
 ```bash
-python scripts/link-live-skills.py --agent codex --apply
-python scripts/check-live-links.py --agent codex
+python scripts/install-skills.py install
+python scripts/install-skills.py install --apply
 ```
 
-Claude Code 使用者首次 clone 后运行：
+安装到 Claude Code：
 
 ```bash
-python scripts/link-live-skills.py --agent claude --apply
-python scripts/check-live-links.py --agent claude
+python scripts/install-skills.py install --agent claude
+python scripts/install-skills.py install --agent claude --apply
 ```
 
-脚本默认使用当前用户目录，不会写死某台机器的用户路径：
-
-- Codex: `~/.codex/skills`
-- Claude Code: `~/.claude/skills`
-
-如需指定其他 live skill 根目录：
+安装到其他 Agent Skills 目录：
 
 ```bash
-python scripts/link-live-skills.py --live-root "<path-to-skills>" --apply
-python scripts/check-live-links.py --live-root "<path-to-skills>"
+python scripts/install-skills.py install --target-root "<path-to-skills>"
+python scripts/install-skills.py install --target-root "<path-to-skills>" --apply
 ```
+
+目标中已有真实 Skill 目录时，安装器默认拒绝覆盖。确认直接更新且不保留持久备份后，显式添加：
+
+```bash
+python scripts/install-skills.py install --apply --overwrite
+```
+
+安装器始终拒绝覆盖 symlink、junction 或其他 reparse point；开发仓库的 live-link 工作流参见 `CONTRIBUTING.md`。
+
+## 校验与卸载
+
+校验安装收据、版本、文件集合和内容哈希：
+
+```bash
+python scripts/install-skills.py verify
+python scripts/install-skills.py verify --agent claude
+```
+
+卸载默认只预览，添加 `--apply` 后才执行：
+
+```bash
+python scripts/install-skills.py uninstall
+python scripts/install-skills.py uninstall --apply
+```
+
+如果已安装 Skill 有任何修改、增删文件或哈希变化，安装器会整体拒绝自动卸载，以免删除用户内容。
+
+校验或卸载时应使用与已安装版本相同的发行包；升级安装成功后会生成新版本收据。
 
 ## Skill 范围
 
-核心专利工作流 skill：
+核心专利工作流 Skill：
 
 - `cn-patent-repo-scout`
 - `cn-patent-mainline-analysis`
@@ -60,7 +82,7 @@ python scripts/check-live-links.py --live-root "<path-to-skills>"
 - `cn-patent-docx-export`
 - `cn-patent-domain-runtime`
 
-支撑型 vendored skill：
+支撑型 vendored Skill：
 
 - `seaborn`
 - `scientific-visualization`
@@ -69,13 +91,10 @@ python scripts/check-live-links.py --live-root "<path-to-skills>"
 - `markdown-mermaid-writing`
 - `generate-image`
 
-## 本地检查
+## 许可证
 
-```bash
-python scripts/check-release.py
-python scripts/check-live-links.py
-```
+本项目自有内容采用 [MIT License](LICENSE)。第三方 Skill 的来源、目录摘要和许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 与 `third_party/`。
 
-## 版本迭代
+## 参与开发
 
-仓库名保持 `patents-workflow` 不变。版本通过 `VERSION`、`manifest.json`、`CHANGELOG.md`、git tag 和 GitHub Release 管理。
+源码开发、live link、提交前检查和版本发布流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
