@@ -59,7 +59,7 @@ class InstallerTests(unittest.TestCase):
             installed = run_python(INSTALLER, "install", "--target-root", str(target), "--apply")
             self.assertEqual(installed.returncode, 0, installed.stderr)
             self.assertEqual({path.name for path in target.iterdir() if path.is_dir()}, set(SKILL_NAMES))
-            self.assertTrue((target / ".patents-workflow-install.json").is_file())
+            self.assertTrue((target / ".zhuanli-flow-install.json").is_file())
 
             verified = run_python(INSTALLER, "verify", "--target-root", str(target))
             self.assertEqual(verified.returncode, 0, verified.stderr)
@@ -70,7 +70,7 @@ class InstallerTests(unittest.TestCase):
 
             removed = run_python(INSTALLER, "uninstall", "--target-root", str(target), "--apply")
             self.assertEqual(removed.returncode, 0, removed.stderr)
-            self.assertFalse((target / ".patents-workflow-install.json").exists())
+            self.assertFalse((target / ".zhuanli-flow-install.json").exists())
             self.assertTrue(all(not (target / name).exists() for name in SKILL_NAMES))
 
     def test_existing_directory_requires_explicit_overwrite(self) -> None:
@@ -176,7 +176,7 @@ class InstallerTests(unittest.TestCase):
             def fail_once(source, destination):
                 nonlocal stage_moves
                 source_path = Path(source)
-                if source_path.parent.name.startswith(".patents-workflow-stage-"):
+                if source_path.parent.name.startswith(".zhuanli-flow-stage-"):
                     stage_moves += 1
                     if stage_moves == 2:
                         raise OSError("injected install failure")
@@ -188,7 +188,7 @@ class InstallerTests(unittest.TestCase):
             for name in SKILL_NAMES:
                 self.assertEqual((target / name / "sentinel.txt").read_text(encoding="utf-8"), name)
             self.assertFalse((target / module.RECEIPT_NAME).exists())
-            self.assertFalse(any(path.name.startswith(".patents-workflow-") for path in target.iterdir()))
+            self.assertFalse(any(path.name.startswith(".zhuanli-flow-") for path in target.iterdir()))
 
 
 class ReleaseBuildTests(unittest.TestCase):
@@ -197,7 +197,7 @@ class ReleaseBuildTests(unittest.TestCase):
             output = Path(raw)
             first = run_python(BUILDER, "--output-dir", str(output))
             self.assertEqual(first.returncode, 0, first.stderr)
-            archive = output / "patents-workflow-v2.1.0-full.zip"
+            archive = output / "zhuanli-flow-v2.1.0-full.zip"
             first_bytes = archive.read_bytes()
             first_hash = hashlib.sha256(first_bytes).hexdigest()
 
@@ -207,7 +207,7 @@ class ReleaseBuildTests(unittest.TestCase):
             checksum = (output / f"{archive.name}.sha256").read_text(encoding="utf-8")
             self.assertEqual(checksum, f"{first_hash}  {archive.name}\n")
 
-            prefix = "patents-workflow-2.1.0/"
+            prefix = "zhuanli-flow-2.1.0/"
             with zipfile.ZipFile(archive) as bundle:
                 names = set(bundle.namelist())
             self.assertIn(prefix + "scripts/install-skills.py", names)
@@ -221,7 +221,7 @@ class ReleaseBuildTests(unittest.TestCase):
                 self.assertFalse(any(part in name for part in forbidden), name)
 
 
-RECEIPT_NAME = ".patents-workflow-install.json"
+RECEIPT_NAME = ".zhuanli-flow-install.json"
 
 
 if __name__ == "__main__":

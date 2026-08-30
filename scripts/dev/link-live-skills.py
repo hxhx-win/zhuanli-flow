@@ -53,7 +53,7 @@ def remove_live_link(path: Path) -> None:
 
 
 def choose_backup_root(live_root: Path, agent: str) -> Path:
-    base = live_root / f".patents-workflow-backup-{agent}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    base = live_root / f".zhuanli-flow-backup-{agent}-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     candidate = base
     suffix = 2
     while path_lexists(candidate):

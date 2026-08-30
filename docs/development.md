@@ -2,7 +2,7 @@
 
 ## 仓库定位
 
-`patents-workflow` 源码仓库是 15 个声明 Skill 的真实文件位置。live link 仅用于贡献者开发；普通用户应使用 GitHub Release 完整包和 `scripts/install-skills.py`。
+`ZhuanliFlow`（仓库名 `zhuanli-flow`）是 15 个声明 Skill 的真实文件位置。live link 仅用于贡献者开发；普通用户应使用 GitHub Release 完整包和 `scripts/install-skills.py`。
 
 Codex 首次 clone 后运行：
 
@@ -52,4 +52,4 @@ python -B scripts/dev/check-live-links.py --agent codex
 
 ## 版本迭代
 
-仓库名保持 `patents-workflow` 不变。版本通过 `VERSION`、`manifest.json`、`CHANGELOG.md`、git tag 和 GitHub Release 管理。
+仓库名保持 `zhuanli-flow` 不变。版本通过 `VERSION`、`manifest.json`、`CHANGELOG.md`、git tag 和 GitHub Release 管理。

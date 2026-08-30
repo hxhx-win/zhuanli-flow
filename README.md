@@ -1,21 +1,21 @@
-# patents-workflow
+# ZhuanliFlow
 
 _把中文发明专利起草，从一次性提示词变成可恢复、可校验、可交接的完整工作流。_
 
 _A deterministic Agent Skill workflow for drafting, reviewing, and delivering Chinese invention patents._
 
-[![Release](https://img.shields.io/github/v/release/hxhx-win/patents-workflow?display_name=tag)](https://github.com/hxhx-win/patents-workflow/releases)
-[![CI](https://github.com/hxhx-win/patents-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/hxhx-win/patents-workflow/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/hxhx-win/zhuanli-flow?display_name=tag)](https://github.com/hxhx-win/zhuanli-flow/releases)
+[![CI](https://github.com/hxhx-win/zhuanli-flow/actions/workflows/ci.yml/badge.svg)](https://github.com/hxhx-win/zhuanli-flow/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Agents: Codex and Claude](https://img.shields.io/badge/agents-Codex%20%7C%20Claude-6f42c1.svg)](#兼容性)
 
-[快速开始](#-五分钟快速开始) · [工作流程](#-完整工作流) · [核心能力](#-为什么使用-patents-workflow) · [参与开发](#-参与开发)
+[快速开始](#-五分钟快速开始) · [工作流程](#-完整工作流) · [核心能力](#-为什么使用-zhuanliflow) · [参与开发](#-参与开发)
 
-`patents-workflow` 是一套面向中文发明专利的 Agent Skills。它把方向发现、主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿和 DOCX 交付串成一条有状态的流程。关键节点由 Domain Runtime 校验，宿主 Agent 负责理解资料、调用专业 Skill，并在需要决策时把控制权交还给用户。
+`ZhuanliFlow` 是一套面向中文发明专利的 Agent Skills。它把方向发现、主线分析、现有技术检索、技术交底、正式稿起草、代理师审稿和 DOCX 交付串成一条有状态的流程。关键节点由 Domain Runtime 校验，宿主 Agent 负责理解资料、调用专业 Skill，并在需要决策时把控制权交还给用户。
 
 当前版本：`2.1.0`
 
-## 🎯 为什么使用 patents-workflow
+## 🎯 为什么使用 ZhuanliFlow
 
 | 能力 | 带来的变化 | 实现依据 |
 | --- | --- | --- |
@@ -69,11 +69,11 @@ flowchart TB
 
 ### 1. 下载完整发行包
 
-从 [GitHub Releases](https://github.com/hxhx-win/patents-workflow/releases) 下载同一版本的两个文件：
+从 [GitHub Releases](https://github.com/hxhx-win/zhuanli-flow/releases) 下载同一版本的两个文件：
 
 ```text
-patents-workflow-v2.1.0-full.zip
-patents-workflow-v2.1.0-full.zip.sha256
+zhuanli-flow-v2.1.0-full.zip
+zhuanli-flow-v2.1.0-full.zip.sha256
 ```
 
 请使用命名的 `full.zip`。GitHub 自动生成的 Source code 压缩包面向贡献者，不是整理后的用户安装包。
@@ -83,19 +83,19 @@ patents-workflow-v2.1.0-full.zip.sha256
 PowerShell：
 
 ```powershell
-Get-FileHash .\patents-workflow-v2.1.0-full.zip -Algorithm SHA256
-Get-Content .\patents-workflow-v2.1.0-full.zip.sha256
+Get-FileHash .\zhuanli-flow-v2.1.0-full.zip -Algorithm SHA256
+Get-Content .\zhuanli-flow-v2.1.0-full.zip.sha256
 ```
 
 Linux 或 macOS：
 
 ```bash
-sha256sum -c patents-workflow-v2.1.0-full.zip.sha256
+sha256sum -c zhuanli-flow-v2.1.0-full.zip.sha256
 ```
 
 ### 3. 安装并校验
 
-解压后进入 `patents-workflow-2.1.0/`。安装器默认面向 Codex 的 `~/.codex/skills`；第一条命令只预览，第二条才会写入文件：
+解压后进入 `zhuanli-flow-2.1.0/`。安装器默认面向 Codex 的 `~/.codex/skills`；第一条命令只预览，第二条才会写入文件：
 
 ```bash
 python scripts/install-skills.py install

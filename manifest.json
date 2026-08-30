@@ -1,5 +1,5 @@
 {
-  "name": "patents-workflow",
+  "name": "zhuanli-flow",
   "version": "2.1.0",
   "description": "中文专利工作流 skill 套件，包含专利起草主流程和支撑型可视化、绘图、Markdown skill。",
   "skills": [

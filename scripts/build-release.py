@@ -75,7 +75,7 @@ def sha256_file(path: Path) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="构建 patents-workflow 确定性完整发行包。")
+    parser = argparse.ArgumentParser(description="构建 ZhuanliFlow 确定性完整发行包。")
     parser.add_argument("--output-dir", default=str(REPO_ROOT / "dist"), help="输出目录，默认 dist/")
     args = parser.parse_args()
     try:
@@ -83,14 +83,14 @@ def main() -> int:
         version = str(manifest["version"])
         output_dir = Path(args.output_dir).expanduser().absolute()
         output_dir.mkdir(parents=True, exist_ok=True)
-        asset_name = f"patents-workflow-v{version}-full.zip"
+        asset_name = f"zhuanli-flow-v{version}-full.zip"
         zip_path = output_dir / asset_name
         checksum_path = output_dir / f"{asset_name}.sha256"
         temporary_path = output_dir / f".{asset_name}.tmp"
         if temporary_path.exists():
             temporary_path.unlink()
 
-        write_deterministic_zip(temporary_path, f"patents-workflow-{version}", release_files(manifest))
+        write_deterministic_zip(temporary_path, f"zhuanli-flow-{version}", release_files(manifest))
         os.replace(temporary_path, zip_path)
         digest = sha256_file(zip_path)
         checksum_path.write_text(f"{digest}  {asset_name}\n", encoding="utf-8", newline="\n")

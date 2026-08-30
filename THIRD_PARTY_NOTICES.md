@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-`patents-workflow` 自有内容使用仓库根目录的 MIT License。`skills/` 下列目录来源于第三方开源项目，并保留各自声明的许可证。
+`ZhuanliFlow` 自有内容使用仓库根目录的 MIT License。`skills/` 下列目录来源于第三方开源项目，并保留各自声明的许可证。
 
 历史导入时未记录精确的上游 commit。为避免给出无法证明的版本信息，`third_party/provenance.json` 将 `source_revision` 明确记为 `null`，并使用当前仓库中每个 vendored Skill 的确定性目录树 SHA-256 标识实际分发内容。
 

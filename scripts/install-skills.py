@@ -14,7 +14,7 @@ from _release_utils import file_inventory, is_link_like, path_lexists, sha256_fi
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = REPO_ROOT / "manifest.json"
 SKILLS_ROOT = REPO_ROOT / "skills"
-RECEIPT_NAME = ".patents-workflow-install.json"
+RECEIPT_NAME = ".zhuanli-flow-install.json"
 DEFAULT_TARGET_ROOTS = {
     "codex": Path.home() / ".codex" / "skills",
     "claude": Path.home() / ".claude" / "skills",
@@ -93,7 +93,7 @@ def preflight_install(target_root: Path, names: list[str], overwrite: bool) -> N
 def build_receipt(manifest: dict, inventories: dict[str, dict[str, str]]) -> dict:
     return {
         "schema_version": 1,
-        "package_name": str(manifest.get("name", "patents-workflow")),
+        "package_name": str(manifest.get("name", "zhuanli-flow")),
         "version": str(manifest.get("version", "")),
         "manifest_sha256": sha256_file(MANIFEST_PATH),
         "installed_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -135,8 +135,8 @@ def apply_install(
 ) -> list[str]:
     names = skill_names(manifest)
     target_root.mkdir(parents=True, exist_ok=True)
-    stage_root = Path(tempfile.mkdtemp(prefix=".patents-workflow-stage-", dir=target_root))
-    rollback_root = target_root / f".patents-workflow-rollback-{uuid.uuid4().hex}"
+    stage_root = Path(tempfile.mkdtemp(prefix=".zhuanli-flow-stage-", dir=target_root))
+    rollback_root = target_root / f".zhuanli-flow-rollback-{uuid.uuid4().hex}"
     installed: list[str] = []
     moved_old: list[str] = []
     warnings: list[str] = []
@@ -250,7 +250,7 @@ def verify_receipt(target_root: Path, manifest: dict, receipt: dict) -> list[str
 
 
 def apply_uninstall(target_root: Path, names: list[str]) -> None:
-    holding_root = target_root / f".patents-workflow-uninstall-{uuid.uuid4().hex}"
+    holding_root = target_root / f".zhuanli-flow-uninstall-{uuid.uuid4().hex}"
     moved: list[str] = []
     receipt_path = target_root / RECEIPT_NAME
     receipt_moved = False
@@ -318,7 +318,7 @@ def command_uninstall(args: argparse.Namespace, manifest: dict) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="安装、校验或卸载 patents-workflow 完整 Skill 套件。")
+    parser = argparse.ArgumentParser(description="安装、校验或卸载 ZhuanliFlow 完整 Skill 套件。")
     subparsers = parser.add_subparsers(dest="command", required=True)
     for command in ("install", "verify", "uninstall"):
         subparser = subparsers.add_parser(command)
