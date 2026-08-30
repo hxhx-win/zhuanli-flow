@@ -84,7 +84,7 @@
 | step 5 审稿前风险确认 | 编排器(主 agent) | AskUserQuestion + Edit 状态文件 |
 | **step 6 代理师审稿（前置：模式选择）** | **编排器 AskUserQuestion 选 single/multi + 写入 `state.step_6.review_mode` + `state.step_6.review_mode_selected_at`（伪产物 `reviews/review-mode-selection.md` 已废，改 state 字段，通过派单 prompt 传给 subagent）** | **AskUserQuestion + Edit state** |
 | **step 6 代理师审稿（single 模式）** | **`cn-patent-attorney-review` 派 1 个 subagent (mode=single)** | **Agent (subagent_type=general-purpose)** |
-| **step 6 代理师审稿（multi 模式）** | **`cn-patent-attorney-review` 主 agent 单条 message 并行派 7 个方向 subagent + 后续派 1 个综合 subagent** | **Agent ×7 并行 + Agent ×1 综合** |
+| **step 6 代理师审稿（multi 模式）** | **`cn-patent-attorney-review` 主 agent 单条 message 并行派 6 个方向 subagent + 后续派 1 个综合 subagent** | **Agent ×6 并行 + Agent ×1 综合** |
 | step 7 Gate B 用户确认 | 编排器(主 agent) | AskUserQuestion |
 | step 8 反馈修订 | **`cn-patent-attorney-review` 派 revision subagent (mode=revision)** | **Agent (subagent_type=general-purpose)** |
 | step 9 Gate C 质量检查 + 交付 | 编排器(主 agent) | Bash 调 `automated_quality_check.py` + AskUserQuestion |
@@ -95,7 +95,7 @@ step 3 评审与 step 3 技术交底书两个阶段使用同一个 skill `cn-pat
 
 ```
 stage: review | disclosure-generation
-skill_root: /root/.claude/skills/cn-patent-disclosure-draft
+skill_root: <skills_root>/cn-patent-disclosure-draft
 patent_root: <patent root 绝对路径>
 任务: subagent 内部通过 Skill 工具加载 cn-patent-disclosure-draft SKILL.md,按其「subagent 入口分路」段加载对应 stage 的纪律 references。
 输入产物绝对路径列表（按列出顺序 Read，作为 Skill 加载失败时的硬路径兜底）:
@@ -111,7 +111,7 @@ patent_root: <patent root 绝对路径>
 ### mainline-analysis 派 subagent 契约（防漂移）
 
 ```
-skill_root: /root/.claude/skills/cn-patent-mainline-analysis
+skill_root: <skills_root>/cn-patent-mainline-analysis
 patent_root: <patent root 绝对路径>
 任务: subagent 内部通过 Skill 工具加载 cn-patent-mainline-analysis SKILL.md,按其工作流执行主线分析。
 输入产物绝对路径列表:
@@ -126,7 +126,7 @@ patent_root: <patent root 绝对路径>
 ### prior-art-search 派 subagent 契约（防漂移）
 
 ```
-skill_root: /root/.claude/skills/cn-patent-prior-art-search
+skill_root: <skills_root>/cn-patent-prior-art-search
 patent_root: <patent root 绝对路径>
 任务: subagent 内部通过 Skill 工具加载 cn-patent-prior-art-search SKILL.md,按其工作流执行现有技术检索。
 输入产物绝对路径列表:
@@ -147,7 +147,7 @@ step 4 正式稿起草由 `cn-patent-formal-drafting` SKILL 承载,编排器派 
 
 ```
 mode: drafting
-skill_root: /root/.claude/skills/cn-patent-formal-drafting
+skill_root: <skills_root>/cn-patent-formal-drafting
 patent_root: <patent root 绝对路径,形如 <project_root>/patent/<patent-slug>>
 输入产物绝对路径列表:
   - <patent_root>/disclosure/disclosure-draft.md
@@ -185,12 +185,12 @@ step 6 与 step 8 均使用 `cn-patent-attorney-review` SKILL；由 dispatch pro
 | stage | mode 值 | dispatch 数量 |
 |---|---|---|
 | step 6 single | `single` | 1 |
-| step 6 multi (方向) | `direction-01` ~ `direction-07` | 7 并行 |
-| step 6 multi (综合) | `synthesize` | 1（在 7 个方向都返回后派） |
+| step 6 multi (方向) | `direction-01` ~ `direction-06` | 6 并行 |
+| step 6 multi (综合) | `synthesize` | 1（在 6 个方向都返回后派） |
 | step 8 revision | `revision` | 1 |
 
 详细 prompt 模板、产物路径、返回长度硬约束见：
-- 7 方向 + 综合：`cn-patent-attorney-review/references/multi-agent-dispatch.md`
+- 6 方向 + 综合：`cn-patent-attorney-review/references/multi-agent-dispatch.md`
 - revision：`cn-patent-attorney-review/references/revision-mode.md`（含输入契约「默认 4 核心 + 按需 Read」、起草侧 references trigger 表、派单前 R 规则注解一致性预审、上下文压力预算）
 
 字段口径以两份 references 为权威；本表与 references 任一处修改必须同步另一处。

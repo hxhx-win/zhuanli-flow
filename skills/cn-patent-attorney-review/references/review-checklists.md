@@ -88,7 +88,8 @@
 输入文件：
 
 - 待审专利稿（权利要求书 + 说明书）。
-- `cn-patent-formal-drafting/references/language-style-guide.md`（7 条硬规则、差例重写、自检清单的唯一来源）。
+- `cn-patent-formal-drafting/references/language-style-rules.md`（R1–R7 硬规则与自检清单的唯一来源）。
+- `cn-patent-formal-drafting/references/language-style-examples.md`（差例、好例与重写示范的唯一来源）。
 
 主 agent 单 agent 模式下必须按本清单执行；多 agent 模式下并入「形式与证据审查」子 agent，或单独派发只读「语言风格审查」子 agent。
 
@@ -107,7 +108,7 @@
 - 命中 R3 / R4 的条款必须单独列入「高优先级问题」；
 - 命中 R1 / R2 / R6 的条款列入「中优先级问题」；
 - 命中 R5 / R7 公式问题列入「高优先级问题」；其他 R5 / R7 列入「形式与术语问题」；
-- 修改建议必须援引 `language-style-guide.md` 对应小节的差例重写示例，不得只给抽象描述。
+- 修改建议必须援引 `language-style-examples.md` 对应小节的差例重写示例，不得只给抽象描述。
 
 优先级提示：
 
@@ -218,10 +219,10 @@
 
 - 待审正式稿（drafts/markdown/<draft-name>.md，常驻必读）
 - 方法类（待审稿命中方法类时）：
-  - CN113596424A 原稿：`/root/.claude/skills/cn-patent-attorney-review/references/CN113596424A_动态范围映射的方法和装置-结构化整理版.md`
+  - CN113596424A 原稿：`references/CN113596424A_动态范围映射的方法和装置-结构化整理版.md`
   - `../cn-patent-formal-drafting/references/method-claim-drafting.md`（§独权骨架 + §从权梯队 + §红线 + §权要句式库 + §实施方式句式库）
 - 结构类（待审稿命中结构类时）：
-  - CN117336591A 原稿：`/root/.claude/skills/cn-patent-attorney-review/references/CN117336591A_摄像头模组和电子设备.md`
+  - CN117336591A 原稿：`references/CN117336591A_摄像头模组和电子设备.md`
   - `../cn-patent-formal-drafting/references/structural-claim-drafting.md`（§独权骨架 + §从权梯队 + §红线 + §权要句式库 + §实施方式句式库）
 
 5 子项（每项独立扫描，单独输出 schema）：

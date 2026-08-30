@@ -21,7 +21,7 @@
 | 02 | direction-02 | 权利要求审查（独权必要性、从权层次、装置/整机配套保护对照） | `references/review-checklists.md § 权利要求审查清单` + **按权 1 措辞判型选起草侧骨架表**（方法类 → `cn-patent-formal-drafting/references/method-claim-drafting.md`，重点看 §A8 装置镜像 + §配套保护；结构类 → `cn-patent-formal-drafting/references/structural-claim-drafting.md`，重点看 §权要句式库 S6 整机配套） | `reviews/attorney-review/02-claims.md` |
 | 03 | direction-03 | 说明书支撑审查 | `references/review-checklists.md § 说明书支撑审查清单` | `reviews/attorney-review/03-spec-support.md` |
 | 04 | direction-04 | 形式与证据审查 | `references/review-checklists.md § 形式与证据审查清单` | `reviews/attorney-review/04-form-evidence.md` |
-| 05 | direction-05 | 语言风格审查（B 风格 R1-R7） | `references/review-checklists.md § 语言风格审查清单` + `cn-patent-formal-drafting/references/language-style-guide.md` | `reviews/attorney-review/05-language-style.md` |
+| 05 | direction-05 | 语言风格审查（B 风格 R1-R7） | `references/review-checklists.md § 语言风格审查清单` + `cn-patent-formal-drafting/references/language-style-rules.md` + `cn-patent-formal-drafting/references/language-style-examples.md` | `reviews/attorney-review/05-language-style.md` |
 | 06 | direction-06 | 法条合规审查（审查员视角，22.2/22.3/22.4/26.3/26.4） | `references/review-checklists.md § 法条合规审查清单` + 编排模式下 `evidence/prior-art-search-report.md` | `reviews/attorney-review/06-legal-compliance.md` |
 
 ## 派单 prompt 硬规则（主 agent 必读）
@@ -30,7 +30,7 @@
 
 - **禁止**抄写、总结、改写、列举 references 中的硬规则内容（如 R1-R7 具体条款、各审查清单条目、判定标准）
 - **允许**列：mode 名 / 方向职能名 / 输出产物路径 / 允许 Read 范围（路径）/ 禁止 Read 范围 / 返回格式
-- 引用规则时只用「编号 + references 路径」，例 `按 language-style-guide.md R1-R7 逐条审查`，**不展开任何一条**
+- 引用规则时只用「编号 + references 路径」，例 `按 language-style-rules.md R1-R7 逐条审查，并按 language-style-examples.md 核对重写示范`，**不展开任何一条**
 
 **根因**：主 agent 通常未读 references 原文，自编规则注解容易与原文漂移；subagent 收到 prompt 后会以 prompt 内已结构化的注解为依据判定，错误会被分发到所有方向，综合 subagent 不会重审。
 
@@ -38,6 +38,8 @@
 
 ```text
 mode: direction-NN
+skill_root: <skills_root>/cn-patent-attorney-review
+formal_drafting_skill_root: <skills_root>/cn-patent-formal-drafting
 正式稿路径: {正式稿绝对路径}
 patent_root: {patent root 绝对路径}
 输出产物绝对路径: {patent_root}/reviews/attorney-review/0N-{name}.md
@@ -59,6 +61,8 @@ patent_root: {patent root 绝对路径}
 
 ```text
 mode: direction-01
+skill_root: <skills_root>/cn-patent-attorney-review
+formal_drafting_skill_root: <skills_root>/cn-patent-formal-drafting
 正式稿路径: {正式稿绝对路径}
 patent_root: {patent root 绝对路径}
 输出产物绝对路径: {patent_root}/reviews/attorney-review/01-quality-aura.md
@@ -74,11 +78,11 @@ patent_root: {patent root 绝对路径}
   1. Read 待审正式稿,定位权 1 第一句
   2. 按上面判型规则确定类型(方法类 / 结构类),如无法判定立即按 stop-recommended 返回不再 Read
   3. Read 一份且仅一份锚样稿:
-     - 方法类 → /root/.claude/skills/cn-patent-attorney-review/references/CN113596424A_动态范围映射的方法和装置-结构化整理版.md
-     - 结构类 → /root/.claude/skills/cn-patent-attorney-review/references/CN117336591A_摄像头模组和电子设备.md
+     - 方法类 → <skill_root>/references/CN113596424A_动态范围映射的方法和装置-结构化整理版.md
+     - 结构类 → <skill_root>/references/CN117336591A_摄像头模组和电子设备.md
   4. Read 一份且仅一份起草侧骨架表(§独权骨架 + §从权梯队 + §红线 + §权要句式库 + §实施方式句式库):
-     - 方法类 → /root/.claude/skills/cn-patent-formal-drafting/references/method-claim-drafting.md
-     - 结构类 → /root/.claude/skills/cn-patent-formal-drafting/references/structural-claim-drafting.md
+     - 方法类 → <formal_drafting_skill_root>/references/method-claim-drafting.md
+     - 结构类 → <formal_drafting_skill_root>/references/structural-claim-drafting.md
   5. Read references/review-checklists.md § 气质审查清单
 
 硬规则:

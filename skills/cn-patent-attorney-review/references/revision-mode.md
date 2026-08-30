@@ -115,18 +115,18 @@ revision subagent **按修订内容触发条件** Read（不切换 SKILL、不�
 | 独权必要性筛查 / 方法权拆分 / 子步骤层级 | `cn-patent-formal-drafting/references/method-claim-drafting.md` |
 | 装置 / 结构权撰写 / 装置-方法镜像 | `cn-patent-formal-drafting/references/structural-claim-drafting.md`（结构类装置 / 系统 / 电子设备 / 介质均汇入此文件）+ `method-claim-drafting.md`（方法类配套装置按 A8 装置镜像段处理） |
 | 判型分类 / 电子设备权 / 介质权 / 应用场景权引用范围 | `cn-patent-formal-drafting/references/claim-type-classification.md` |
-| B 风格 R1-R7（句长、目的性短语、缩写双注、术语统一、八股段落） | `cn-patent-formal-drafting/references/language-style-guide.md` |
+| B 风格 R1-R7（句长、目的性短语、缩写双注、术语统一、八股段落） | `cn-patent-formal-drafting/references/language-style-rules.md` + `cn-patent-formal-drafting/references/language-style-examples.md` |
 | 公式编号 / 公式块格式 / 符号定义 | `cn-patent-formal-drafting/references/formula-and-math.md` |
 | 附图引用 / 附图与说明书对应 | `cn-patent-formal-drafting/references/figure-handoff.md` |
 | 通用起草段落体例 | `cn-patent-formal-drafting/references/drafting-rules.md` |
 
 ## 派单前的 R 规则注解一致性预审（编排器主 agent 责任）
 
-为避免「派单 prompt 中 R 规则注解 ≠ language-style-guide.md 原文」类 prompt 误注事件（pts-bresenham r5 复盘：方向 06 派单 prompt 误把「本发明 → 本申请」写为 R3 硬规则，与 R3 真硬规则「禁目的性短语」不符），编排器主 agent 派 revision subagent 前必须：
+为避免「派单 prompt 中 R 规则注解 ≠ language-style-rules.md 原文」类 prompt 误注事件（pts-bresenham r5 复盘：方向 06 派单 prompt 误把「本发明 → 本申请」写为 R3 硬规则，与 R3 真硬规则「禁目的性短语」不符），编排器主 agent 派 revision subagent 前必须：
 
-- 若 user-feedback.md 或综合 attorney-review.md 中包含 R1-R7 类决策 / 改动，主 agent 对照 `cn-patent-formal-drafting/references/language-style-guide.md` 原文核验每条 R 规则注解
+- 若 user-feedback.md 或综合 attorney-review.md 中包含 R1-R7 类决策 / 改动，主 agent 对照 `cn-patent-formal-drafting/references/language-style-rules.md` 原文核验每条 R 规则注解，并用 `language-style-examples.md` 核对重写示范
 - 发现 mismatch 时，在 user-feedback.md 中显式追加「prompt 误注澄清」段，列明 review 注解 vs reference 原文的差异 + 处置（拒绝 / 部分接受 / 全接受），revision subagent 据此跳过或调整该项
-- revision subagent **禁止仅依据 review 派单注解机械执行 R 规则修订**，所有 R 类改动必须以 language-style-guide.md 原文为最终权威
+- revision subagent **禁止仅依据 review 派单注解机械执行 R 规则修订**，所有 R 类改动必须以 `language-style-rules.md` 为规则权威、以 `language-style-examples.md` 为示例权威
 
 ## 上下文压力预算
 

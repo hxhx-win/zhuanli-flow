@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | 1 | [待填写] | [待填写] | [待填写] | [是/否] |
 
-### 可选：按法条索引（仅当 attorney-review 含 direction-07 法条合规问题时填）
+### 可选：按法条索引（仅当 attorney-review 含 direction-06 法条合规问题时填）
 
 ```yaml
 by_article:

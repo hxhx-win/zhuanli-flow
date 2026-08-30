@@ -40,7 +40,7 @@ description: 当用户已有一份中文发明专利稿（Markdown 或文本）�
 
 ## 单 agent 审稿
 
-当用户选择单 agent 审查时，主 agent 必须读取 `references/review-checklists.md` 中全部审查清单（含 `## 气质审查清单`、`## 权利要求审查清单`、`## 说明书支撑审查清单`、`## 形式与证据审查清单`、`## 语言风格审查清单（B 风格硬规则）`、`## 法条合规审查清单（审查员视角）`），并自行覆盖气质、权利要求、说明书支撑、形式与证据、语言风格和法条合规六大维度。语言风格按 R1–R7 逐条扫描，命中差例特征（`以使`、`不可分割`、`第一方面` 等）必须按 `language-style-guide.md` 中差例重写示例输出建议。气质审查清单本身已列必读输入与 5 子项判定规则，主 agent 按清单执行即可。
+当用户选择单 agent 审查时，主 agent 必须读取 `references/review-checklists.md` 中全部审查清单（含 `## 气质审查清单`、`## 权利要求审查清单`、`## 说明书支撑审查清单`、`## 形式与证据审查清单`、`## 语言风格审查清单（B 风格硬规则）`、`## 法条合规审查清单（审查员视角）`），并自行覆盖气质、权利要求、说明书支撑、形式与证据、语言风格和法条合规六大维度。语言风格按 `language-style-rules.md` 的 R1–R7 逐条扫描，命中差例特征（`以使`、`不可分割`、`第一方面` 等）必须按 `language-style-examples.md` 中差例重写示例输出建议。气质审查清单本身已列必读输入与 5 子项判定规则，主 agent 按清单执行即可。
 
 ## 多 agent 审稿
 
@@ -75,7 +75,7 @@ description: 当用户已有一份中文发明专利稿（Markdown 或文本）�
 - 中优先级问题
 - 形式与术语问题
 - 气质审查发现（5 子项：独权肥度 / 抽象层 / 细节落点 / 节奏对照 / 密度匹配）
-- 语言风格问题（按 R1–R7 分组，引用 `language-style-guide.md` 差例重写示例）
+- 语言风格问题（按 `language-style-rules.md` 的 R1–R7 分组，引用 `language-style-examples.md` 差例重写示例）
 - 法条合规问题（按 22.2 / 22.3 / 22.4 / 26.3 / 26.4 分组）
 - 需要用户选择的事项
 - 需要用户补充的材料
@@ -97,6 +97,7 @@ description: 当用户已有一份中文发明专利稿（Markdown 或文本）�
 
 - 审稿方法论：[references/review-methodology.md](references/review-methodology.md)
 - 审查清单：[references/review-checklists.md](references/review-checklists.md)
-- B 风格语言硬规则与差例重写：[../cn-patent-formal-drafting/references/language-style-guide.md](../cn-patent-formal-drafting/references/language-style-guide.md)
+- B 风格语言硬规则：[../cn-patent-formal-drafting/references/language-style-rules.md](../cn-patent-formal-drafting/references/language-style-rules.md)
+- B 风格差例、好例与重写示范：[../cn-patent-formal-drafting/references/language-style-examples.md](../cn-patent-formal-drafting/references/language-style-examples.md)
 - 迭代与回退规则：审稿前风险 / Gate B 硬门禁 / 修订复核见 `../cn-patent-workflow-orchestrator/references/orchestration-philosophy.md § 审稿前风险与 Gate B/修订复核哲学`；状态字段与阶段流转见 `../cn-patent-workflow-orchestrator/references/state-machine-reference.md § 审稿/修订迭代状态流`
 - 可选关联 skill：`cn-patent-formal-drafting`（修订后可能需要重新起草部分内容）
