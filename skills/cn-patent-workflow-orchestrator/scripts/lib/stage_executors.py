@@ -22,7 +22,17 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Dict
+
+
+ORCHESTRATOR_SKILL_ROOT = Path(__file__).resolve().parents[2]
+SKILLS_ROOT = ORCHESTRATOR_SKILL_ROOT.parent
+
+
+def _skill_path(skill_name: str, *parts: str) -> str:
+    """返回基于当前安装位置解析的 Skill 内绝对路径。"""
+    return str(SKILLS_ROOT.joinpath(skill_name, *parts))
 
 
 # ---------------------------------------------------------------------------
@@ -74,8 +84,8 @@ STAGE_EXECUTORS: Dict[str, Dict[str, Any]] = {
         "executor": "cn-patent-disclosure-review",
         "type": "main_run_skill",
         "must_load": [
-            "/root/.claude/skills/cn-patent-disclosure-review/SKILL.md",
-            "/root/.claude/skills/cn-patent-disclosure-review/references/protocols.md",
+            _skill_path("cn-patent-disclosure-review", "SKILL.md"),
+            _skill_path("cn-patent-disclosure-review", "references", "protocols.md"),
         ],
         "ask_user_question_template_count": 3,
         "do_not_merge_user_questions": True,
@@ -97,8 +107,8 @@ STAGE_EXECUTORS: Dict[str, Dict[str, Any]] = {
         "executor": "orchestrator",
         "type": "main_agent_ask_user",
         "must_load": [
-            "/root/.claude/skills/cn-patent-workflow-orchestrator/assets/decision-categories.json",
-            "/root/.claude/skills/cn-patent-workflow-orchestrator/references/drafting-decisions.md",
+            _skill_path("cn-patent-workflow-orchestrator", "assets", "decision-categories.json"),
+            _skill_path("cn-patent-workflow-orchestrator", "references", "drafting-decisions.md"),
         ],
         "do_not_merge_user_questions": True,
     },

@@ -68,7 +68,7 @@ review 与 disclosure-generation 共享 mainline-analysis.md / evidence-matrix.m
 
 ```
 stage: review | disclosure-generation
-skill_root: /root/.claude/skills/cn-patent-disclosure-draft
+skill_root: <skills_root>/cn-patent-disclosure-draft
 patent_root: <patent root 绝对路径>
 任务: subagent 内部通过 Skill 工具加载 cn-patent-disclosure-draft SKILL.md,按其「subagent 入口分路」段加载对应 stage 的纪律 references。
 输入产物绝对路径列表（按列出顺序 Read，作为 Skill 加载失败时的硬路径兜底）:
