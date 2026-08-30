@@ -1,0 +1,91 @@
+name: Bug 报告
+description: 报告可复现的错误、异常行为或文档与实现不一致
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请只提供复现问题所需的信息，并先删除日志、截图或样例中的密钥、Token、未公开专利资料和个人信息。
+
+        安全漏洞或疑似凭据泄露请停止填写，改按仓库的 Security Policy 私下报告。
+
+  - type: checkboxes
+    id: public_report
+    attributes:
+      label: 公开报告确认
+      options:
+        - label: 这不是安全漏洞或疑似凭据泄露，所附内容已经脱敏
+          required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: ZhuanliFlow 版本
+      description: 填写 Release 版本或 commit SHA
+      placeholder: v2.1.0 或 0b8aa85
+    validations:
+      required: true
+
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Agent
+      options:
+        - Codex
+        - Claude Code
+        - 其他 Agent
+    validations:
+      required: true
+
+  - type: input
+    id: skill
+    attributes:
+      label: 相关 Skill 或脚本
+      description: 不确定时填写触发问题的命令或流程阶段
+      placeholder: cn-patent-domain-runtime 或 scripts/install-skills.py
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 请包括操作系统、Python 版本和必要的 Agent 版本
+      placeholder: Windows 11；Python 3.11；Codex ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 提供能稳定触发问题的最小步骤
+      placeholder: |
+        1. 运行 ...
+        2. 输入 ...
+        3. 观察到 ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+      placeholder: 应当发生什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+      placeholder: 实际发生了什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 脱敏日志或补充材料
+      description: 仅粘贴与问题直接相关的片段；不要上传未公开专利资料
+      render: shell

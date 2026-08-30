@@ -11,7 +11,7 @@
 - 可能影响；
 - 已知缓解方式（如有）。
 
-维护者在公开仓库前必须启用 GitHub Private Vulnerability Reporting。若仓库页面尚未提供私密报告入口，请等待入口启用，不要转为公开披露。
+维护者应在仓库公开后立即启用 GitHub Private Vulnerability Reporting。若仓库页面尚未提供私密报告入口，请等待入口启用，不要转为公开披露。
 
 ## 支持范围
 

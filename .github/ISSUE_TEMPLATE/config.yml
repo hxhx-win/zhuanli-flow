@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安全问题与疑似凭据泄露
+    url: https://github.com/hxhx-win/zhuanli-flow/security/policy
+    about: 不要公开披露，请先阅读 Security Policy 并使用私密报告入口

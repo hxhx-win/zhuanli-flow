@@ -17,6 +17,7 @@ env/
 .DS_Store
 Thumbs.db
 /exports/
+/grill-me-sessions/
 /dist/
 /.install-test-tmp/
 .zhuanli-flow-install.json
