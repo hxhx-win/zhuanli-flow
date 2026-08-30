@@ -1,6 +1,6 @@
 import json
-import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -22,29 +22,32 @@ def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
-def add_cache_errors(errors: list[str]) -> None:
-    for root, dirs, files in os.walk(REPO_ROOT):
-        root_path = Path(root)
-        if ".git" in root_path.parts:
-            dirs[:] = []
-            continue
-
-        for dirname in dirs:
-            if dirname in CACHE_DIR_NAMES:
-                errors.append(f"不应提交缓存目录: {root_path / dirname}")
-
-        for filename in files:
-            if Path(filename).suffix in {".pyc", ".pyo"}:
-                errors.append(f"不应提交生成文件: {root_path / filename}")
+def get_tracked_files() -> list[Path]:
+    result = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=REPO_ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    return [
+        REPO_ROOT / raw.decode("utf-8")
+        for raw in result.stdout.split(b"\0")
+        if raw
+    ]
 
 
-def add_secret_errors(errors: list[str]) -> None:
+def add_cache_errors(errors: list[str], tracked_files: list[Path]) -> None:
+    for path in tracked_files:
+        relative = path.relative_to(REPO_ROOT)
+        if any(part in CACHE_DIR_NAMES for part in relative.parts):
+            errors.append(f"不应提交缓存目录: {path}")
+        if path.suffix in {".pyc", ".pyo"}:
+            errors.append(f"不应提交生成文件: {path}")
+
+
+def add_secret_errors(errors: list[str], tracked_files: list[Path]) -> None:
     current_script = Path(__file__).resolve()
-    for path in REPO_ROOT.rglob("*"):
-        if not path.is_file():
-            continue
-        if ".git" in path.parts:
-            continue
+    for path in tracked_files:
         if path.resolve() == current_script:
             continue
         if path.suffix.lower() in BINARY_EXTENSIONS:
@@ -61,6 +64,12 @@ def add_secret_errors(errors: list[str]) -> None:
 
 def main() -> int:
     errors: list[str] = []
+
+    try:
+        tracked_files = get_tracked_files()
+    except (OSError, subprocess.CalledProcessError, UnicodeDecodeError) as exc:
+        print(f"无法读取 Git 跟踪文件列表: {exc}", file=sys.stderr)
+        return 1
 
     if not MANIFEST_PATH.exists():
         print(f"manifest.json not found: {MANIFEST_PATH}", file=sys.stderr)
@@ -110,8 +119,8 @@ def main() -> int:
         if readme and skill_name not in readme:
             errors.append(f"README.md 未提及 manifest skill: {skill_name}")
 
-    add_cache_errors(errors)
-    add_secret_errors(errors)
+    add_cache_errors(errors, tracked_files)
+    add_secret_errors(errors, tracked_files)
 
     if errors:
         print("Release check failed:")
