@@ -1,10 +1,11 @@
+import hashlib
 import json
 import re
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
-from _release_utils import file_inventory, tree_sha256
+from _release_utils import tree_sha256
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -46,6 +47,33 @@ def get_tracked_files() -> list[Path]:
         for raw in result.stdout.split(b"\0")
         if raw
     ]
+
+
+def get_index_inventory(root: Path) -> dict[str, str]:
+    prefix = root.relative_to(REPO_ROOT).as_posix()
+    result = subprocess.run(
+        ["git", "ls-files", "-z", "--", prefix],
+        cwd=REPO_ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+    )
+    repo_paths = sorted(
+        raw.decode("utf-8")
+        for raw in result.stdout.split(b"\0")
+        if raw
+    )
+    inventory: dict[str, str] = {}
+    prefix_path = PurePosixPath(prefix)
+    for repo_path in repo_paths:
+        content = subprocess.run(
+            ["git", "show", f":{repo_path}"],
+            cwd=REPO_ROOT,
+            check=True,
+            stdout=subprocess.PIPE,
+        ).stdout
+        relative = PurePosixPath(repo_path).relative_to(prefix_path).as_posix()
+        inventory[relative] = hashlib.sha256(content).hexdigest()
+    return inventory
 
 
 def add_cache_errors(errors: list[str], tracked_files: list[Path]) -> None:
@@ -116,8 +144,24 @@ def add_provenance_errors(errors: list[str], manifest: dict) -> None:
                 errors.append(f"vendored 许可证文件不存在: {relative_license}")
         skill_root = SKILLS_ROOT / name
         try:
-            actual_hash = tree_sha256(file_inventory(skill_root))
-        except (OSError, ValueError) as exc:
+            status = subprocess.run(
+                [
+                    "git",
+                    "status",
+                    "--porcelain",
+                    "--untracked-files=all",
+                    "--",
+                    skill_root.relative_to(REPO_ROOT).as_posix(),
+                ],
+                cwd=REPO_ROOT,
+                check=True,
+                stdout=subprocess.PIPE,
+            ).stdout
+            if status:
+                errors.append(f"vendored 目录包含未提交变化: {name}")
+                continue
+            actual_hash = tree_sha256(get_index_inventory(skill_root))
+        except (OSError, ValueError, subprocess.CalledProcessError, UnicodeDecodeError) as exc:
             errors.append(f"无法计算 vendored 目录摘要 {name}: {exc}")
             continue
         if entry.get("tree_sha256") != actual_hash:

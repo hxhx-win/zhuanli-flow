@@ -24,6 +24,7 @@ def run_python(script: Path, *args: str) -> subprocess.CompletedProcess[str]:
         [sys.executable, "-B", str(script), *args],
         cwd=REPO_ROOT,
         text=True,
+        encoding="utf-8",
         capture_output=True,
     )
 

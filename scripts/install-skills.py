@@ -21,6 +21,13 @@ DEFAULT_TARGET_ROOTS = {
 }
 
 
+def configure_utf8_stdio() -> None:
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="backslashreplace")
+
+
 class ConflictError(Exception):
     pass
 
@@ -332,6 +339,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> int:
+    configure_utf8_stdio()
     parser = build_parser()
     args = parser.parse_args()
     try:

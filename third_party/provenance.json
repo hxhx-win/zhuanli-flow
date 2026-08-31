@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "tree_hash_algorithm": "sha256(sorted(posix_relative_path_utf8 + NUL + file_sha256_bytes))",
+  "tree_hash_algorithm": "sha256(sorted(posix_relative_path_utf8 + NUL + git_index_file_sha256_bytes))",
   "skills": [
     {
       "name": "seaborn",
@@ -13,7 +13,7 @@
         "third_party/licenses/K-Dense-MIT.txt",
         "third_party/licenses/Seaborn-BSD-3-Clause.txt"
       ],
-      "tree_sha256": "42cba37d5a63d2919db686ce4be51dfde424dead0a694973871745b94f66020c"
+      "tree_sha256": "d21f261b1f28f6185931a9a6a4868e1fad762ee69d23d8faec5eb197628dc489"
     },
     {
       "name": "scientific-visualization",
@@ -25,7 +25,7 @@
       "license_files": [
         "third_party/licenses/K-Dense-MIT.txt"
       ],
-      "tree_sha256": "ec12b4d88fb623c7a1c7b6f65b1ca8a1ab8e02853044f901fc908c1dac83eacf"
+      "tree_sha256": "4a274ba3ed650eea31fef2b560810c846b72954e5267f9ec048729c264f3019f"
     },
     {
       "name": "scientific-schematics",
@@ -37,7 +37,7 @@
       "license_files": [
         "third_party/licenses/K-Dense-MIT.txt"
       ],
-      "tree_sha256": "49eec3628ed966596002e4cbc2f0004517c26956bc724581aec3a1371011f27c"
+      "tree_sha256": "c2b6691f2f51df0a70fa04954091884ebe16e700b6729df024890086caf12f36"
     },
     {
       "name": "matplotlib",
@@ -50,7 +50,7 @@
         "third_party/licenses/K-Dense-MIT.txt",
         "third_party/licenses/Matplotlib.txt"
       ],
-      "tree_sha256": "91c3841990bbaf4444e9288f75b2829aad87906c9a81465cb8455c942eae820f"
+      "tree_sha256": "115fa787b921bc3ee9fd790ebd2489b2c8b945818bad184abc939b9379833141"
     },
     {
       "name": "markdown-mermaid-writing",
@@ -62,7 +62,7 @@
       "license_files": [
         "third_party/licenses/SuperiorByteWorks-Apache-2.0.txt"
       ],
-      "tree_sha256": "2762ca93e1f567cd70fc988b6e0261e5a2fd3fcbb954eb058bbfba14d45d475b"
+      "tree_sha256": "2db60410a12884036d93d232977ef1f47fa2dd8f25423cc8373d67ab47a5b2b0"
     },
     {
       "name": "generate-image",
@@ -74,7 +74,7 @@
       "license_files": [
         "third_party/licenses/K-Dense-MIT.txt"
       ],
-      "tree_sha256": "c239c722fa3dd1adf35612dff70ca0f68c8d4b7aa2b45ec186461ac55e8ae3dd"
+      "tree_sha256": "e154bba645594c2c089ba68db1b9df0b404cbcbaa6b8e3446e8fe67fcbb8bacc"
     }
   ]
 }
